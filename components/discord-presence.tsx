@@ -221,127 +221,126 @@ export function DiscordPresence() {
   // Determine what to show
   const hasGame = !!gameActivity;
   const hasSpotify = !!spotifyActivity;
-  const hasBoth = hasGame && hasSpotify;
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Game Activity Block */}
+    <div className="flex flex-col space-y-3">
+      {/* Game Activity Card */}
       <AnimatePresence mode="wait">
         {hasGame && gameActivity && (
           <motion.div
             key="game-activity"
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center gap-3"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="relative rounded-lg bg-white/5 backdrop-blur-sm p-3"
           >
-            {/* Game icon */}
-            {gameActivity.icon ? (
-              <div className="relative flex-shrink-0">
-                <img
-                  src={gameActivity.icon}
-                  alt={gameActivity.text}
-                  className="h-10 w-10 rounded-lg object-cover shadow-md"
-                  crossOrigin="anonymous"
-                />
-                <span
-                  className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
-                />
-              </div>
-            ) : (
-              <div className="relative flex items-center justify-center">
-                <span
-                  className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
-                />
-                <span
-                  className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
-                  style={{ animationDuration: "3s" }}
-                />
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              {/* Game icon with status badge */}
+              {gameActivity.icon ? (
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={gameActivity.icon}
+                    alt={gameActivity.text}
+                    className="h-11 w-11 rounded-lg object-cover shadow-md"
+                    crossOrigin="anonymous"
+                  />
+                  <span
+                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                  />
+                </div>
+              ) : (
+                <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-white/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-foreground/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.959.401v0a.656.656 0 00.659-.663 47.703 47.703 0 00-.31-4.82 47.944 47.944 0 00-4.163.3.64.64 0 01-.657-.643v0z" />
+                  </svg>
+                  <span
+                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                  />
+                </div>
+              )}
 
-            {/* Game text */}
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-sm text-foreground/90 font-medium tracking-wide truncate">
-                {gameActivity.text}
-              </span>
-              {gameActivity.subtext && (
-                <span className="text-xs text-muted-foreground truncate">
-                  {gameActivity.subtext}
+              {/* Game text */}
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-sm text-foreground font-medium tracking-wide truncate">
+                  {gameActivity.text}
                 </span>
+                {gameActivity.subtext && (
+                  <span className="text-xs text-muted-foreground truncate">
+                    {gameActivity.subtext}
+                  </span>
+                )}
+              </div>
+
+              {/* WebSocket indicator */}
+              {wsConnected && (
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/60 flex-shrink-0" title="Live" />
               )}
             </div>
-
-            {/* WebSocket indicator (only show on first row) */}
-            {wsConnected && !hasBoth && (
-              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
-            )}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Spotify Activity Row - smaller when both are active */}
+      {/* Spotify Activity Card */}
       <AnimatePresence mode="wait">
         {hasSpotify && spotifyActivity && (
           <motion.div
             key="spotify-activity"
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2, delay: hasBoth ? 0.1 : 0 }}
-            className={`flex items-center gap-2 ${hasBoth ? "pl-1 border-l-2 border-muted/30 ml-1" : "gap-3"}`}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: "easeOut", delay: hasGame ? 0.08 : 0 }}
+            className="relative rounded-lg bg-black/30 backdrop-blur-sm p-3"
           >
-            {/* Album art */}
-            {spotifyActivity.icon ? (
-              <div className="relative flex-shrink-0">
-                <img
-                  src={spotifyActivity.icon}
-                  alt={spotifyActivity.text}
-                  className={`rounded-md object-cover shadow-sm ${hasBoth ? "h-7 w-7" : "h-10 w-10 rounded-lg shadow-md"}`}
-                  crossOrigin="anonymous"
-                />
-                {!hasGame && (
-                  <span
-                    className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+            <div className="flex items-center gap-3">
+              {/* Album art with status badge (only if no game) */}
+              {spotifyActivity.icon ? (
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={spotifyActivity.icon}
+                    alt={spotifyActivity.text}
+                    className="h-11 w-11 rounded-lg object-cover shadow-md"
+                    crossOrigin="anonymous"
                   />
-                )}
-              </div>
-            ) : (
-              !hasGame && (
-                <div className="relative flex items-center justify-center">
-                  <span
-                    className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
-                  />
-                  <span
-                    className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
-                    style={{ animationDuration: "3s" }}
-                  />
+                  {!hasGame && (
+                    <span
+                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                    />
+                  )}
                 </div>
-              )
-            )}
+              ) : (
+                <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                  </svg>
+                  {!hasGame && (
+                    <span
+                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                    />
+                  )}
+                </div>
+              )}
 
-            {/* Spotify text */}
-            <div className="flex flex-col min-w-0 flex-1">
-              {hasBoth && (
-                <span className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">
+              {/* Spotify text */}
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
                   Now Playing
                 </span>
-              )}
-              <span className={`text-foreground/90 font-medium tracking-wide truncate ${hasBoth ? "text-xs" : "text-sm"}`}>
-                {hasBoth ? spotifyActivity.text : `Listening to ${spotifyActivity.text}`}
-              </span>
-              {spotifyActivity.subtext && (
-                <span className={`text-muted-foreground truncate ${hasBoth ? "text-[10px]" : "text-xs"}`}>
-                  {spotifyActivity.subtext}
+                <span className="text-sm text-foreground font-medium tracking-wide truncate">
+                  {spotifyActivity.text}
                 </span>
+                {spotifyActivity.subtext && (
+                  <span className="text-xs text-muted-foreground truncate">
+                    {spotifyActivity.subtext}
+                  </span>
+                )}
+              </div>
+
+              {/* WebSocket indicator (only if no game) */}
+              {wsConnected && !hasGame && (
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/60 flex-shrink-0" title="Live" />
               )}
             </div>
-
-            {/* WebSocket indicator */}
-            {wsConnected && !hasGame && (
-              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
-            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -351,46 +350,45 @@ export function DiscordPresence() {
         {!hasGame && !hasSpotify && (
           <motion.div
             key="fallback-status"
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center gap-3"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="relative rounded-lg bg-white/5 backdrop-blur-sm p-3"
           >
-            <div className="relative flex items-center justify-center">
-              <span
-                className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
-              />
-              <span
-                className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
-                style={{ animationDuration: "3s" }}
-              />
-            </div>
+            <div className="flex items-center gap-3">
+              {/* Status dot */}
+              <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-white/5 flex items-center justify-center">
+                <div className="relative">
+                  <span
+                    className={`h-3 w-3 rounded-full ${statusColors[status]} animate-breathe block`}
+                  />
+                  <span
+                    className={`absolute inset-0 h-3 w-3 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
+                    style={{ animationDuration: "3s" }}
+                  />
+                </div>
+              </div>
 
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-sm text-foreground/90 font-medium tracking-wide truncate">
-                {loading ? (
-                  <span className="animate-pulse text-muted-foreground">Loading...</span>
-                ) : (
-                  fallbackStatus.text
-                )}
-              </span>
-            </div>
+              {/* Status text */}
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-sm text-foreground font-medium tracking-wide truncate">
+                  {loading ? (
+                    <span className="animate-pulse text-muted-foreground">Loading...</span>
+                  ) : (
+                    fallbackStatus.text
+                  )}
+                </span>
+              </div>
 
-            {/* WebSocket indicator */}
-            {wsConnected && (
-              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
-            )}
+              {/* WebSocket indicator */}
+              {wsConnected && (
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/60 flex-shrink-0" title="Live" />
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Show WebSocket indicator at the bottom when both activities are shown */}
-      {hasBoth && wsConnected && (
-        <div className="flex justify-end">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
-        </div>
-      )}
     </div>
   );
 }
