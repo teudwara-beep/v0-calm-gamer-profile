@@ -21,7 +21,7 @@ export function SocialIcon({ icon, className = "" }: SocialIconProps) {
     ),
     steam: (
       <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.524 0 2.494-2.03 4.524-4.524 4.524h-.008v2.993c2.022 0 3.944.818 5.322 2.201 1.377-1.383 2.195-3.305 2.195-5.327 0-4.916-3.997-8.891-8.925-8.891zm4.524 7.811c-1.812 0-3.282-1.47-3.282-3.281s1.47-3.282 3.282-3.282c1.811 0 3.281 1.471 3.281 3.282s-1.47 3.281-3.281 3.281zm9.474 3.282c0 .633-.512 1.145-1.145 1.145-.633 0-1.146-.512-1.146-1.145s.513-1.146 1.146-1.146c.633 0 1.145.513 1.145 1.146z"/>
+        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.524 0 2.493-2.03 4.524-4.524 4.524-1.193 0-2.27-.468-3.07-1.227l-2.855 4.102c.068.028.137.052.202.082 3.015 1.337 6.366 1.348 9.445.278 4.176-1.496 7.152-5.399 7.152-9.808C23.929 5.303 19.125.001 11.979 0zm-5.455 12.477c-1.099 0-1.991.893-1.991 1.991 0 1.099.893 1.992 1.991 1.992 1.099 0 1.992-.893 1.992-1.992 0-1.099-.893-1.991-1.992-1.991z"/>
       </svg>
     ),
     github: (
@@ -55,7 +55,7 @@ export function SocialLinks({ socials }: SocialLinksProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 * index, duration: 0.4 }}
-          className="group relative p-2.5 rounded-lg bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-lg border border-border/60 hover:border-lavender/60 hover:bg-gradient-to-br hover:from-card/90 hover:to-card/70 transition-all duration-500 ease-in-out hover:shadow-xl hover:shadow-lavender/20"
+          className="group relative p-2.5 rounded-lg bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-lg border border-border/60 hover:border-lavender/60 hover:bg-gradient-to-br hover:from-lavender/20 hover:to-purple/20 transition-all duration-500"
           aria-label={social.name}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
@@ -66,7 +66,7 @@ export function SocialLinks({ socials }: SocialLinksProps) {
           />
           
           {/* Hover tooltip */}
-          <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs text-muted-foreground bg-card/95 rounded border border-border/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none shadow-lg">
+          <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs text-muted-foreground bg-card/95 rounded border border-border/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
             {social.name}
           </span>
         </motion.a>
