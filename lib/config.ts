@@ -8,7 +8,7 @@ export const siteConfig = {
   
   // Discord ID for Lanyard API
   // Replace with your Discord User ID
-  discordId: "YOUR_DISCORD_ID",
+  discordId: "1138828023748120656",
   
   // Profile information
   profile: {
