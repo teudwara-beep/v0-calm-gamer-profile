@@ -14,7 +14,8 @@ export const siteConfig = {
   profile: {
     username: "Theekz",
     tagline: "Chill vibes & late night gaming sessions",
-    avatar: "/placeholder.svg?height=120&width=120",
+    // Discord avatar - will be fetched from Discord API in real-time via Lanyard
+    avatar: `https://cdn.discordapp.com/avatars/1138828023748120656/a_placeholder.gif?size=128`,
     bio: "Just a cozy gamer who loves lofi beats, rainy nights, and immersive adventures. Currently exploring virtual worlds and collecting good memories.",
   },
   
