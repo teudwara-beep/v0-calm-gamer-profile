@@ -392,3 +392,16 @@ export function DiscordPresence() {
     </div>
   );
 }
+export function useDiscordStatus() {
+  const [status, setStatus] = useState<"online"|"idle"|"dnd"|"offline">("offline");
+
+  useEffect(() => {
+    fetch(`https://api.lanyard.rest/v1/users/${siteConfig.discordId}`)
+      .then(r => r.json())
+      .then(json => {
+        if (json.success) setStatus(json.data.discord_status);
+      });
+  }, []);
+
+  return status;
+}
