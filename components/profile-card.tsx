@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
-import { DiscordPresence } from "./discord-presence";
+import { DiscordPresence, useDiscordStatus } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
 import { useState } from "react";
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
   const [imageError, setImageError] = useState(false);
-
+const discordStatus = useDiscordStatus();
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
