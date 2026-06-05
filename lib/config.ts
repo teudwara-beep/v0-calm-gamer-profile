@@ -16,7 +16,7 @@ export const siteConfig = {
     tagline: "in my own world for a bit.",
     // Discord avatar - will be fetched from Discord API in real-time via Lanyard
     avatar: `https://cdn.discordapp.com/avatars/1138828023748120656/a_placeholder.gif?size=128`,
-    bio: "Just a cozy gamer who loves lofi beats, rainy nights, and immersive adventures. Currently exploring virtual worlds and collecting good memories.",
+    bio: "just trying to block out everything else for a bit. just some decent music, a good game, and clearing my mind.",
   },
   
   // Social links
