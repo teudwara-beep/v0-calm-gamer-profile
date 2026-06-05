@@ -13,7 +13,7 @@ export const siteConfig = {
   // Profile information
   profile: {
     username: "Theekz",
-    tagline: "Chill vibes & late night gaming sessions",
+    tagline: "in my own world for a bit",
     avatar: "/placeholder.svg?height=120&width=120",
     bio: "Just a cozy gamer who loves lofi beats, rainy nights, and immersive adventures. Currently exploring virtual worlds and collecting good memories.",
   },
