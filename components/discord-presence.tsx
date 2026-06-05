@@ -28,6 +28,13 @@ interface LanyardData {
   };
 }
 
+interface ActivityInfo {
+  text: string;
+  subtext?: string;
+  icon?: string;
+  type: "game" | "spotify" | "streaming" | "status";
+}
+
 const statusColors = {
   online: "bg-emerald-400",
   idle: "bg-amber-400",
@@ -129,7 +136,7 @@ export function DiscordPresence() {
           handlePresenceUpdate(json.data);
         }
       } catch (error) {
-        console.log("[v0] Failed to fetch initial Discord presence:", error);
+        console.error("Failed to fetch initial Discord presence:", error);
       }
     };
 
@@ -143,18 +150,10 @@ export function DiscordPresence() {
     };
   }, [handlePresenceUpdate]);
 
-  // Priority: Game > Streaming > Spotify > Custom Status > Default
-  const getActivity = (): {
-    text: string;
-    subtext?: string;
-    icon?: string;
-    type: "game" | "spotify" | "streaming" | "status";
-  } => {
-    if (!data) {
-      return { text: "Offline", type: "status" };
-    }
+  // Extract game activity if present
+  const getGameActivity = (): ActivityInfo | null => {
+    if (!data) return null;
 
-    // 1. Check for gaming activity (highest priority)
     const gameActivity = data.activities.find((a) => a.type === ACTIVITY_TYPE.GAME);
     if (gameActivity) {
       let icon: string | undefined;
@@ -169,7 +168,7 @@ export function DiscordPresence() {
       };
     }
 
-    // 2. Check for streaming
+    // Also check for streaming (treat similarly to game)
     const streamActivity = data.activities.find((a) => a.type === ACTIVITY_TYPE.STREAMING);
     if (streamActivity) {
       return {
@@ -179,23 +178,34 @@ export function DiscordPresence() {
       };
     }
 
-    // 3. Check for Spotify
-    if (data.spotify) {
-      return {
-        text: `Listening to ${data.spotify.song}`,
-        subtext: `by ${data.spotify.artist}`,
-        icon: data.spotify.album_art_url,
-        type: "spotify",
-      };
+    return null;
+  };
+
+  // Extract Spotify activity if present
+  const getSpotifyActivity = (): ActivityInfo | null => {
+    if (!data?.spotify) return null;
+
+    return {
+      text: data.spotify.song,
+      subtext: `by ${data.spotify.artist}`,
+      icon: data.spotify.album_art_url,
+      type: "spotify",
+    };
+  };
+
+  // Fallback status when no game or spotify
+  const getFallbackStatus = (): ActivityInfo => {
+    if (!data) {
+      return { text: "Offline", type: "status" };
     }
 
-    // 4. Check for custom status
+    // Check for custom status
     const customStatus = data.activities.find((a) => a.type === ACTIVITY_TYPE.CUSTOM);
     if (customStatus?.state) {
       return { text: customStatus.state, type: "status" };
     }
 
-    // 5. Fallback - peaceful default when online but not doing anything specific
+    // Peaceful default when online but not doing anything specific
     if (data.discord_status !== "offline") {
       return { text: "Just Chilling", type: "status" };
     }
@@ -203,85 +213,183 @@ export function DiscordPresence() {
     return { text: "Offline", type: "status" };
   };
 
-  const activity = getActivity();
+  const gameActivity = getGameActivity();
+  const spotifyActivity = getSpotifyActivity();
+  const fallbackStatus = getFallbackStatus();
   const status = data?.discord_status || "offline";
 
-  return (
-    <div className="flex items-center gap-3">
-      {/* Activity icon (game/album art) */}
-      <AnimatePresence mode="wait">
-        {activity.icon ? (
-          <motion.div
-            key={activity.icon}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-            className="relative flex-shrink-0"
-          >
-            <img
-              src={activity.icon}
-              alt={activity.text}
-              className="h-10 w-10 rounded-lg object-cover shadow-md"
-              crossOrigin="anonymous"
-            />
-            {/* Status dot overlay */}
-            <span
-              className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="status-dot"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-            className="relative flex items-center justify-center"
-          >
-            <span
-              className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
-            />
-            <span
-              className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
-              style={{ animationDuration: "3s" }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+  // Determine what to show
+  const hasGame = !!gameActivity;
+  const hasSpotify = !!spotifyActivity;
+  const hasBoth = hasGame && hasSpotify;
 
-      {/* Status text */}
-      <div className="flex flex-col min-w-0">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={activity.text}
+  return (
+    <div className="flex flex-col gap-2">
+      {/* Game Activity Block */}
+      <AnimatePresence mode="wait">
+        {hasGame && gameActivity && (
+          <motion.div
+            key="game-activity"
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.2 }}
-            className="text-sm text-foreground/90 font-medium tracking-wide truncate"
+            className="flex items-center gap-3"
           >
-            {loading ? (
-              <span className="animate-pulse text-muted-foreground">Loading...</span>
+            {/* Game icon */}
+            {gameActivity.icon ? (
+              <div className="relative flex-shrink-0">
+                <img
+                  src={gameActivity.icon}
+                  alt={gameActivity.text}
+                  className="h-10 w-10 rounded-lg object-cover shadow-md"
+                  crossOrigin="anonymous"
+                />
+                <span
+                  className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                />
+              </div>
             ) : (
-              activity.text
+              <div className="relative flex items-center justify-center">
+                <span
+                  className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
+                />
+                <span
+                  className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
+                  style={{ animationDuration: "3s" }}
+                />
+              </div>
             )}
-          </motion.span>
-        </AnimatePresence>
-        {activity.subtext && !loading && (
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-xs text-muted-foreground truncate"
-          >
-            {activity.subtext}
-          </motion.span>
-        )}
-      </div>
 
-      {/* WebSocket connection indicator (subtle) */}
-      {wsConnected && (
-        <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
+            {/* Game text */}
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="text-sm text-foreground/90 font-medium tracking-wide truncate">
+                {gameActivity.text}
+              </span>
+              {gameActivity.subtext && (
+                <span className="text-xs text-muted-foreground truncate">
+                  {gameActivity.subtext}
+                </span>
+              )}
+            </div>
+
+            {/* WebSocket indicator (only show on first row) */}
+            {wsConnected && !hasBoth && (
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Spotify Activity Row - smaller when both are active */}
+      <AnimatePresence mode="wait">
+        {hasSpotify && spotifyActivity && (
+          <motion.div
+            key="spotify-activity"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.2, delay: hasBoth ? 0.1 : 0 }}
+            className={`flex items-center gap-2 ${hasBoth ? "pl-1 border-l-2 border-muted/30 ml-1" : "gap-3"}`}
+          >
+            {/* Album art */}
+            {spotifyActivity.icon ? (
+              <div className="relative flex-shrink-0">
+                <img
+                  src={spotifyActivity.icon}
+                  alt={spotifyActivity.text}
+                  className={`rounded-md object-cover shadow-sm ${hasBoth ? "h-7 w-7" : "h-10 w-10 rounded-lg shadow-md"}`}
+                  crossOrigin="anonymous"
+                />
+                {!hasGame && (
+                  <span
+                    className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                  />
+                )}
+              </div>
+            ) : (
+              !hasGame && (
+                <div className="relative flex items-center justify-center">
+                  <span
+                    className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
+                  />
+                  <span
+                    className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
+                    style={{ animationDuration: "3s" }}
+                  />
+                </div>
+              )
+            )}
+
+            {/* Spotify text */}
+            <div className="flex flex-col min-w-0 flex-1">
+              {hasBoth && (
+                <span className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">
+                  Now Playing
+                </span>
+              )}
+              <span className={`text-foreground/90 font-medium tracking-wide truncate ${hasBoth ? "text-xs" : "text-sm"}`}>
+                {hasBoth ? spotifyActivity.text : `Listening to ${spotifyActivity.text}`}
+              </span>
+              {spotifyActivity.subtext && (
+                <span className={`text-muted-foreground truncate ${hasBoth ? "text-[10px]" : "text-xs"}`}>
+                  {spotifyActivity.subtext}
+                </span>
+              )}
+            </div>
+
+            {/* WebSocket indicator */}
+            {wsConnected && !hasGame && (
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fallback status when no game or spotify */}
+      <AnimatePresence mode="wait">
+        {!hasGame && !hasSpotify && (
+          <motion.div
+            key="fallback-status"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-3"
+          >
+            <div className="relative flex items-center justify-center">
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${statusColors[status]} animate-breathe`}
+              />
+              <span
+                className={`absolute h-2.5 w-2.5 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
+                style={{ animationDuration: "3s" }}
+              />
+            </div>
+
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="text-sm text-foreground/90 font-medium tracking-wide truncate">
+                {loading ? (
+                  <span className="animate-pulse text-muted-foreground">Loading...</span>
+                ) : (
+                  fallbackStatus.text
+                )}
+              </span>
+            </div>
+
+            {/* WebSocket indicator */}
+            {wsConnected && (
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Show WebSocket indicator at the bottom when both activities are shown */}
+      {hasBoth && wsConnected && (
+        <div className="flex justify-end">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/50" title="Live" />
+        </div>
       )}
     </div>
   );
