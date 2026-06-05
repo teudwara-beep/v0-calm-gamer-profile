@@ -63,9 +63,9 @@ const discordStatus = useDiscordStatus();
             
             {/* Online status indicator with dynamic styling */}
             <div className={`absolute bottom-0 right-0 h-6 w-6 rounded-full border-2 border-card shadow-lg animate-calm-pulse ${
-  data?.discord_status === "online" ? "bg-emerald-400 shadow-emerald-400/50" :
-  data?.discord_status === "idle" ? "bg-amber-400 shadow-amber-400/50" :
-  data?.discord_status === "dnd" ? "bg-rose-400 shadow-rose-400/50" :
+  discordStatus === "online" ? "bg-emerald-400 shadow-emerald-400/50" :
+  discordStatus === "idle" ? "bg-amber-400 shadow-amber-400/50" :
+  discordStatus === "dnd" ? "bg-rose-400 shadow-rose-400/50" :
   "bg-muted-foreground"
 }`} />
           </motion.div>
