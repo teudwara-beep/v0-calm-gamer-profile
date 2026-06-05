@@ -20,7 +20,7 @@ export const siteConfig = {
   
   // Social links
   socials: [
-    { name: "Discord", url: "discord.com/users/1138828023748120656", icon: "discord" },
+    { name: "Discord", url: "https://discord.com/users/1138828023748120656", icon: "discord" },
     { name: "Twitter", url: "https://twitter.com", icon: "twitter" },
     { name: "Twitch", url: "https://twitch.tv", icon: "twitch" },
     { name: "Steam", url: "https://store.steampowered.com", icon: "steam" },
