@@ -5,9 +5,19 @@ import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
+import { useLanyard } from "@/hooks/use-lanyard";
+import { User } from "lucide-react";
+
+const statusColors = {
+  online: "bg-emerald-400",
+  idle: "bg-amber-400",
+  dnd: "bg-rose-400",
+  offline: "bg-muted-foreground",
+} as const;
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
+  const { avatarUrl, decorationUrl, status, loading } = useLanyard();
 
   return (
     <motion.div
@@ -28,7 +38,7 @@ export function ProfileCard() {
         
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
-          {/* Avatar */}
+          {/* Avatar with Discord decoration */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -38,19 +48,64 @@ export function ProfileCard() {
             {/* Soft glow ring */}
             <div className="absolute -inset-2 rounded-full bg-lavender/20 blur-md animate-soft-glow" />
             
-            {/* Avatar image */}
-            <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-lavender/30 shadow-lg">
-              <Image
-                src={profile.avatar}
-                alt={profile.username}
-                fill
-                className="object-cover"
-                priority
-              />
+            {/* Avatar container with decoration overlay */}
+            <div className="relative h-28 w-28">
+              {/* Main avatar image */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                className="relative h-full w-full rounded-full overflow-hidden border-2 border-lavender/30 shadow-lg"
+              >
+                {loading ? (
+                  // Loading state - subtle pulse
+                  <div className="h-full w-full bg-muted/30 animate-pulse flex items-center justify-center">
+                    <User className="w-10 h-10 text-muted-foreground/50" />
+                  </div>
+                ) : avatarUrl ? (
+                  // Dynamic Discord avatar
+                  <Image
+                    src={avatarUrl}
+                    alt={profile.username}
+                    fill
+                    className="object-cover"
+                    priority
+                    unoptimized // Required for external Discord CDN URLs
+                  />
+                ) : (
+                  // Fallback - minimalist user icon
+                  <div className="h-full w-full bg-muted/20 flex items-center justify-center">
+                    <User className="w-12 h-12 text-muted-foreground/60" />
+                  </div>
+                )}
+              </motion.div>
+              
+              {/* Avatar decoration overlay (Nitro effect) */}
+              {decorationUrl && !loading && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  className="absolute -inset-3 pointer-events-none"
+                >
+                  <Image
+                    src={decorationUrl}
+                    alt="Avatar decoration"
+                    fill
+                    className="object-contain"
+                    unoptimized // Required for animated GIFs and external URLs
+                  />
+                </motion.div>
+              )}
             </div>
             
             {/* Online status indicator */}
-            <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card bg-emerald-400 animate-breathe" />
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.3, type: "spring" }}
+              className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+            />
           </motion.div>
           
           {/* Username */}
