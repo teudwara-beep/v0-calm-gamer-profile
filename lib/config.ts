@@ -21,9 +21,9 @@ export const siteConfig = {
   // Social links
   socials: [
     { name: "Discord", url: "https://discord.com", icon: "discord" },
-    { name: "Twitter", url: "https://twitter.com", icon: "twitter" },
     { name: "Twitch", url: "https://twitch.tv", icon: "twitch" },
     { name: "Steam", url: "https://store.steampowered.com", icon: "steam" },
     { name: "GitHub", url: "https://github.com", icon: "github" },
+    { name: "YouTube", url: "https://youtube.com/@musicvibes-sr4ky?si=Cqw3GWgU1QhdsTOL", icon: "youtube" },
   ],
 } as const;
