@@ -5,12 +5,25 @@ import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence, useDiscordStatus } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
   const [imageError, setImageError] = useState(false);
+const [avatarUrl, setAvatarUrl] = useState<string>("");
 const discordStatus = useDiscordStatus();
+
+useEffect(() => {
+  fetch(`https://api.lanyard.rest/v1/users/1138828023748120656`)
+    .then(r => r.json())
+    .then(json => {
+      if (json.success && json.data.discord_user.avatar) {
+        const hash = json.data.discord_user.avatar;
+        const ext = hash.startsWith("a_") ? "gif" : "png";
+        setAvatarUrl(`https://cdn.discordapp.com/avatars/1138828023748120656/${hash}.${ext}?size=128`);
+      }
+    });
+}, []);
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -44,7 +57,7 @@ const discordStatus = useDiscordStatus();
             <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-lavender/40 shadow-xl ring-2 ring-indigo-500/20 bg-gradient-to-br from-lavender/20 to-indigo-500/10">
               {!imageError && profile.avatar ? (
                 <Image
-                  src={profile.avatar}
+                  src={avatarUrl || profile.avatar}
                   alt={profile.username}
                   fill
                   className="object-cover"
