@@ -15,7 +15,7 @@ export const siteConfig = {
     username: "Theekz",
     tagline: "in my own world for a bit",
     avatar: "/placeholder.svg?height=120&width=120",
-    bio: "Just a cozy gamer who loves lofi beats, rainy nights, and immersive adventures. Currently exploring virtual worlds and collecting good memories.",
+    bio: "nothing special here, just trying to clear my head after a long day with some decent music and good games",
   },
   
   // Social links
