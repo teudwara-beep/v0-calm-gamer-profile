@@ -396,11 +396,46 @@ export function useDiscordStatus() {
   const [status, setStatus] = useState<"online"|"idle"|"dnd"|"offline">("offline");
 
   useEffect(() => {
-    fetch(`https://api.lanyard.rest/v1/users/${siteConfig.discordId}`)
-      .then(r => r.json())
-      .then(json => {
-        if (json.success) setStatus(json.data.discord_status);
-      });
+    let ws: WebSocket | null = null;
+    let heartbeatInterval: NodeJS.Timeout | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+
+    const connect = () => {
+      ws = new WebSocket("wss://api.lanyard.rest/socket");
+
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.op === 1) {
+          heartbeatInterval = setInterval(() => {
+            if (ws?.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ op: 3 }));
+            }
+          }, message.d.heartbeat_interval);
+          ws?.send(JSON.stringify({
+            op: 2,
+            d: { subscribe_to_id: siteConfig.discordId },
+          }));
+        }
+        if (message.op === 0 && (message.t === "INIT_STATE" || message.t === "PRESENCE_UPDATE")) {
+          setStatus(message.d.discord_status);
+        }
+      };
+
+      ws.onclose = () => {
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
+        reconnectTimeout = setTimeout(connect, 5000);
+      };
+
+      ws.onerror = () => ws?.close();
+    };
+
+    connect();
+
+    return () => {
+      if (heartbeatInterval) clearInterval(heartbeatInterval);
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (ws) ws.close();
+    };
   }, []);
 
   return status;
