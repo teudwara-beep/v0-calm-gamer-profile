@@ -5,9 +5,11 @@ import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
+import { useState } from "react";
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
+  const [imageError, setImageError] = useState(false);
 
   return (
     <motion.div
@@ -39,15 +41,24 @@ export function ProfileCard() {
             <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/30 to-indigo-500/20 blur-md animate-soft-glow" />
             
             {/* Avatar image */}
-            <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-lavender/40 shadow-xl ring-2 ring-indigo-500/20">
-              <Image
-                src={profile.avatar}
-                alt={profile.username}
-                fill
-                className="object-cover"
-                priority
-                unoptimized
-              />
+            <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-lavender/40 shadow-xl ring-2 ring-indigo-500/20 bg-gradient-to-br from-lavender/20 to-indigo-500/10">
+              {!imageError && profile.avatar ? (
+                <Image
+                  src={profile.avatar}
+                  alt={profile.username}
+                  fill
+                  className="object-cover"
+                  priority
+                  unoptimized
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-lavender/40 to-indigo-500/30">
+                  <div className="text-3xl font-bold text-lavender/60">
+                    {profile.username?.[0]?.toUpperCase() || "?"}
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* Online status indicator with dynamic styling */}
