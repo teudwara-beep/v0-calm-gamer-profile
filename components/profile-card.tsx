@@ -88,13 +88,11 @@ export function ProfileCard() {
                   transition={{ delay: 0.3, duration: 0.4 }}
                   className="absolute -inset-3 pointer-events-none"
                 >
-                  <Image
-                    src={decorationUrl}
-                    alt="Avatar decoration"
-                    fill
-                    className="object-contain"
-                    unoptimized // Required for animated GIFs and external URLs
-                  />
+                  <img
+                  src={decorationUrl}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
                 </motion.div>
               )}
             </div>
