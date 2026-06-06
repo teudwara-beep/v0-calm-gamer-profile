@@ -1,5 +1,4 @@
 "use client";
-
 import { motion } from "framer-motion";
 import { ProfileCard } from "./profile-card";
 
@@ -16,13 +15,44 @@ export function MainProfile({ onBack }: MainProfileProps) {
       transition={{ duration: 0.8 }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
+      {/* Animated calm gradient background */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div
+          animate={{
+            background: [
+              "radial-gradient(ellipse at 20% 50%, oklch(0.25 0.08 280) 0%, oklch(0.10 0.03 260) 50%, oklch(0.08 0.02 240) 100%)",
+              "radial-gradient(ellipse at 80% 30%, oklch(0.22 0.07 300) 0%, oklch(0.10 0.03 270) 50%, oklch(0.08 0.02 250) 100%)",
+              "radial-gradient(ellipse at 50% 80%, oklch(0.20 0.06 260) 0%, oklch(0.10 0.03 280) 50%, oklch(0.08 0.02 260) 100%)",
+              "radial-gradient(ellipse at 20% 50%, oklch(0.25 0.08 280) 0%, oklch(0.10 0.03 260) 50%, oklch(0.08 0.02 240) 100%)",
+            ]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0"
+        />
+        {/* Subtle noise/star layer */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
+            backgroundSize: "80px 80px",
+          }}
+        />
+        {/* Vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%)"
+          }}
+        />
+      </div>
+
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
         onClick={onBack}
-        className="absolute top-8 left-8 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
+        className="absolute top-8 left-8 flex items-center gap-2 text-white/40 hover:text-white/80 transition-colors duration-300 group"
       >
         <svg
           className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform duration-300"
@@ -35,10 +65,10 @@ export function MainProfile({ onBack }: MainProfileProps) {
         </svg>
         <span className="text-sm font-light tracking-wide">Back</span>
       </motion.button>
-      
+
       {/* Profile Card */}
       <ProfileCard />
-      
+
       {/* Footer */}
       <motion.footer
         initial={{ opacity: 0 }}
@@ -46,8 +76,8 @@ export function MainProfile({ onBack }: MainProfileProps) {
         transition={{ delay: 1, duration: 0.6 }}
         className="absolute bottom-6 text-center"
       >
-        <p className="text-xs text-muted-foreground/50 tracking-wide">
-          Made with calm vibes
+        <p className="text-xs text-white/20 tracking-widest">
+          made with calm vibes
         </p>
       </motion.footer>
     </motion.div>
