@@ -14,14 +14,14 @@ export function VideoBackground() {
         <source src={siteConfig.videoSrc} type="video/mp4" />
       </video>
       
-      {/* Dark overlay - reduced for visibility */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-[1px]" />
+      {/* Very light overlay - no background color, just slight blur */}
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
       
       {/* Vignette effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 0%, oklch(0.12 0.01 260 / 40%) 100%)"
+          background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.5) 100%)"
         }}
       />
     </div>
