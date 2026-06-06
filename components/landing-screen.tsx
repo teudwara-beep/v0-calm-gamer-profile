@@ -94,7 +94,7 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
           className="text-white/40 text-xs sm:text-sm font-light tracking-[0.25em] max-w-xs mx-auto"
           style={{ textShadow: "0 1px 10px rgba(0,0,0,0.8)" }}
         >
-          <TypingText text=<TypingText text={siteConfig.profile.tagline} delay={1500} speed={80} /> delay={1500} speed={80} />
+          <TypingText text={siteConfig.profile.tagline} delay={1500} speed={80} />
         </motion.div>
 
         {/* Button */}
