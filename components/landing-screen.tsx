@@ -11,8 +11,8 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.05 }}
-      transition={{ duration: 0.8 }}
+      exit={{ opacity: 0, y: -30, scale: 1.02 }}
+transition={{ duration: 1.2, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
       {/* Main content container */}
