@@ -26,7 +26,7 @@ export function ProfileCard() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="w-full max-w-md mx-auto"
     >
-      <div className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
+      <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70"
         
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
