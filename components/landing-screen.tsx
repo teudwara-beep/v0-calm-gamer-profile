@@ -14,7 +14,7 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
       {/* Soft dark overlay */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]" />
+      <div className="absolute inset-0 bg-black/55 backdrop-blur-[3px]" />
 
       {/* Main content */}
       <motion.div
