@@ -27,7 +27,16 @@ export function ProfileCard() {
       className="w-full max-w-md mx-auto"
     >
       <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70">
-
+{/* Card background video */}
+<video
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="absolute inset-0 h-full w-full object-cover opacity-20"
+>
+  <source src="/card-bg.mp4" type="video/mp4" />
+</video>
         {/* Smooth inner border glow */}
         <div className="absolute inset-0 rounded-[32px] pointer-events-none"
           style={{
