@@ -52,16 +52,16 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
           className="mx-auto h-px w-24 bg-gradient-to-r from-transparent via-white/30 to-transparent"
         />
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* Tagline - Typing animation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 1.3, duration: 0.8 }}
           className="text-white/40 text-xs sm:text-sm font-light tracking-[0.25em] max-w-xs mx-auto"
           style={{ textShadow: "0 1px 10px rgba(0,0,0,0.8)" }}
         >
-          {siteConfig.profile.tagline}
-        </motion.p>
+          <TypingText text={siteConfig.profile.tagline} delay={1500} speed={80} />
+        </motion.div>
 
         {/* Button */}
         <motion.button
