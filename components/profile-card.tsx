@@ -28,6 +28,18 @@ export function ProfileCard() {
     >
       {/* Frosted glass card with enhanced calm aesthetic */}
       <div className="relative rounded-2xl border border-border/50 bg-gradient-to-br from-card/50 via-card/30 to-card/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
+        
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-20 rounded-2xl"
+        >
+          <source src="/profile-bg.mp4" type="video/mp4" />
+        </video>
+
         {/* Subtle gradient overlay - deeper, more peaceful */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-40"
@@ -58,22 +70,19 @@ export function ProfileCard() {
                 className="relative h-full w-full rounded-full overflow-hidden border-2 border-lavender/30 shadow-lg"
               >
                 {loading ? (
-                  // Loading state - subtle pulse
                   <div className="h-full w-full bg-muted/30 animate-pulse flex items-center justify-center">
                     <User className="w-10 h-10 text-muted-foreground/50" />
                   </div>
                 ) : avatarUrl ? (
-                  // Dynamic Discord avatar
                   <Image
                     src={avatarUrl}
                     alt={profile.username}
                     fill
                     className="object-cover"
                     priority
-                    unoptimized // Required for external Discord CDN URLs
+                    unoptimized
                   />
                 ) : (
-                  // Fallback - minimalist user icon
                   <div className="h-full w-full bg-muted/20 flex items-center justify-center">
                     <User className="w-12 h-12 text-muted-foreground/60" />
                   </div>
@@ -89,12 +98,12 @@ export function ProfileCard() {
                   className="absolute -inset-3 pointer-events-none"
                 >
                   <img
-  src={decorationUrl}
-  alt=""
-  className="absolute inset-0 w-full h-full object-contain"
-  style={{ mixBlendMode: 'normal' }}
-  onError={(e) => { e.currentTarget.style.display = 'none' }}
-/>
+                    src={decorationUrl}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-contain"
+                    style={{ mixBlendMode: 'normal' }}
+                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                  />
                 </motion.div>
               )}
             </div>
