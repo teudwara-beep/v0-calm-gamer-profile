@@ -337,13 +337,13 @@ export function DiscordPresence() {
               </div>
 {/* Music visualizer bars */}
               <div className="flex gap-1 items-end justify-center mt-2">
-                {[0, 0.2, 0.4].map((delay, i) => (
+                {[0, 0.15, 0.3, 0.45, 0.6].map((delay, i) => (
                   <div
                     key={i}
-                    className="w-1 bg-emerald-400/60 rounded-full"
+                    className="w-1 bg-indigo-400/50 rounded-full"
                     style={{
                       height: '4px',
-                      animation: `softPulse 1.5s ease-in-out ${delay}s infinite`
+                      animation: `softPulse 2s ease-in-out ${delay}s infinite`
                     }}
                   />
                 ))}
@@ -351,7 +351,7 @@ export function DiscordPresence() {
               <style>{`
                 @keyframes softPulse {
                   0%, 100% { height: 4px; }
-                  50% { height: 12px; }
+                  50% { height: 14px; }
                 }
               `}</style>
               {/* WebSocket indicator (only if no game) */}
