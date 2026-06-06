@@ -4,7 +4,7 @@
 
 export const siteConfig = {
   // Video background - swap this path to change the background
-  videoSrc: "/assets/calm-bg.mp4",
+  videoSrc: "/71 Stunning Small Apartment Decor - Pin-1014295147346132993 - ROTATE - Videobolt.net.mp4",
   
   // Discord ID for Lanyard API
   // Replace with your Discord User ID
