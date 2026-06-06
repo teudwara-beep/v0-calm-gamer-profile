@@ -46,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable}`}>
       <body className="font-sans antialiased">
+       <CursorEffect />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
