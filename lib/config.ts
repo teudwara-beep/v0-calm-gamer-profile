@@ -13,15 +13,14 @@ export const siteConfig = {
   // Profile information
   profile: {
     username: "Theekz",
-    tagline: "in my own world for a bit.",
-    // Discord avatar - will be fetched from Discord API in real-time via Lanyard
-    avatar: `https://cdn.discordapp.com/avatars/1138828023748120656/a_placeholder.gif?size=128`,
-    bio: "just trying to block out everything else for a bit. just some decent music, a good game, and clearing my mind.",
+    tagline: "in my own world for a bit",
+    avatar: "/placeholder.svg?height=120&width=120",
+    bio: "nothing special here, just trying to clear my head after a long day with some decent music and good games",
   },
   
   // Social links
   socials: [
-    { name: "Discord", url: "https://discord.com", icon: "discord" },
+    { name: "Discord", url: "https://discord.com/users/1138828023748120656", icon: "discord" },
     { name: "Twitch", url: "https://twitch.tv", icon: "twitch" },
     { name: "Steam", url: "https://store.steampowered.com", icon: "steam" },
     { name: "GitHub", url: "https://github.com", icon: "github" },

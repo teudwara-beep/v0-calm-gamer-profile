@@ -3,27 +3,22 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
-import { DiscordPresence, useDiscordStatus } from "./discord-presence";
+import { DiscordPresence } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
-import { useState, useEffect } from "react";
+import { useLanyard } from "@/hooks/use-lanyard";
+import { User } from "lucide-react";
+
+const statusColors = {
+  online: "bg-emerald-400",
+  idle: "bg-amber-400",
+  dnd: "bg-rose-400",
+  offline: "bg-muted-foreground",
+} as const;
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
-  const [imageError, setImageError] = useState(false);
-const [avatarUrl, setAvatarUrl] = useState<string>("");
-const discordStatus = useDiscordStatus();
+  const { avatarUrl, decorationUrl, status, loading } = useLanyard();
 
-useEffect(() => {
-  fetch(`https://api.lanyard.rest/v1/users/1138828023748120656`)
-    .then(r => r.json())
-    .then(json => {
-      if (json.success && json.data.discord_user.avatar) {
-        const hash = json.data.discord_user.avatar;
-        const ext = hash.startsWith("a_") ? "gif" : "png";
-        setAvatarUrl(`https://cdn.discordapp.com/avatars/1138828023748120656/${hash}.${ext}?size=128`);
-      }
-    });
-}, []);
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -43,7 +38,7 @@ useEffect(() => {
         
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
-          {/* Avatar */}
+          {/* Avatar with Discord decoration */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -53,34 +48,64 @@ useEffect(() => {
             {/* Soft glow ring */}
             <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/30 to-indigo-500/20 blur-md animate-soft-glow" />
             
-            {/* Avatar image */}
-            <div className="relative h-28 w-28 rounded-full overflow-hidden border-2 border-lavender/40 shadow-xl ring-2 ring-indigo-500/20 bg-gradient-to-br from-lavender/20 to-indigo-500/10">
-              {!imageError && profile.avatar ? (
-                <Image
-                  src={avatarUrl || profile.avatar}
-                  alt={profile.username}
-                  fill
-                  className="object-cover"
-                  priority
-                  unoptimized
-                  onError={() => setImageError(true)}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-lavender/40 to-indigo-500/30">
-                  <div className="text-3xl font-bold text-lavender/60">
-                    {profile.username?.[0]?.toUpperCase() || "?"}
+            {/* Avatar container with decoration overlay */}
+            <div className="relative h-28 w-28">
+              {/* Main avatar image */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                className="relative h-full w-full rounded-full overflow-hidden border-2 border-lavender/30 shadow-lg"
+              >
+                {loading ? (
+                  // Loading state - subtle pulse
+                  <div className="h-full w-full bg-muted/30 animate-pulse flex items-center justify-center">
+                    <User className="w-10 h-10 text-muted-foreground/50" />
                   </div>
-                </div>
+                ) : avatarUrl ? (
+                  // Dynamic Discord avatar
+                  <Image
+                    src={avatarUrl}
+                    alt={profile.username}
+                    fill
+                    className="object-cover"
+                    priority
+                    unoptimized // Required for external Discord CDN URLs
+                  />
+                ) : (
+                  // Fallback - minimalist user icon
+                  <div className="h-full w-full bg-muted/20 flex items-center justify-center">
+                    <User className="w-12 h-12 text-muted-foreground/60" />
+                  </div>
+                )}
+              </motion.div>
+              
+              {/* Avatar decoration overlay (Nitro effect) */}
+              {decorationUrl && !loading && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  className="absolute -inset-3 pointer-events-none"
+                >
+                  <Image
+                    src={decorationUrl}
+                    alt="Avatar decoration"
+                    fill
+                    className="object-contain"
+                    unoptimized // Required for animated GIFs and external URLs
+                  />
+                </motion.div>
               )}
             </div>
             
-            {/* Online status indicator with dynamic styling */}
-            <div className={`absolute bottom-0 right-0 h-6 w-6 rounded-full border-2 border-card shadow-lg animate-calm-pulse ${
-  discordStatus === "online" ? "bg-emerald-400 shadow-emerald-400/50" :
-  discordStatus === "idle" ? "bg-amber-400 shadow-amber-400/50" :
-  discordStatus === "dnd" ? "bg-rose-400 shadow-rose-400/50" :
-  "bg-muted-foreground"
-}`} />
+            {/* Online status indicator */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.3, type: "spring" }}
+              className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+            />
           </motion.div>
           
           {/* Username */}
