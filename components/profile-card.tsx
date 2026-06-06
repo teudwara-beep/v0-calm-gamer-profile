@@ -26,7 +26,7 @@ export function ProfileCard() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="w-full max-w-md mx-auto"
     >
-      <div className="relative rounded-2xl border border-border/50 bg-gradient-to-br from-card/40 via-card/20 to-card/30 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
+      <div className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl"
         
         {/* Background Video inside card */}
         <video
