@@ -93,7 +93,7 @@ export function MainProfile({ onBack }: MainProfileProps) {
         className="absolute bottom-6 text-center"
       >
         <p className="text-xs text-white/20 tracking-widest">
-          made with calm vibes
+          made with Theekshana
         </p>
       </motion.footer>
     </motion.div>
