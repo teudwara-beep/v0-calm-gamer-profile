@@ -335,7 +335,25 @@ export function DiscordPresence() {
                   </span>
                 )}
               </div>
-
+{/* Music visualizer bars */}
+              <div className="flex gap-1 items-end justify-center mt-2">
+                {[0, 0.2, 0.4].map((delay, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-emerald-400/60 rounded-full"
+                    style={{
+                      height: '4px',
+                      animation: `softPulse 1.5s ease-in-out ${delay}s infinite`
+                    }}
+                  />
+                ))}
+              </div>
+              <style>{`
+                @keyframes softPulse {
+                  0%, 100% { height: 4px; }
+                  50% { height: 12px; }
+                }
+              `}</style>
               {/* WebSocket indicator (only if no game) */}
               {wsConnected && !hasGame && (
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/60 flex-shrink-0" title="Live" />
