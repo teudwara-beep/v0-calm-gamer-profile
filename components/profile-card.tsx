@@ -26,21 +26,7 @@ export function ProfileCard() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="w-full max-w-md mx-auto"
     >
-      <div className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl"
-        
-        {/* Background Video inside card */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-30 rounded-2xl"
-        >
-          <source src="/profile-bg.mp4" type="video/mp4" />
-        </video>
-
-        {/* Subtle overlay on top of card video */}
-        <div className="absolute inset-0 pointer-events-none bg-background/20 rounded-2xl" />
+      <div className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
         
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
@@ -114,7 +100,7 @@ export function ProfileCard() {
             className="text-center"
           >
             <h2 className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl font-semibold text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-               {profile.username} ⤿
+              {profile.username} ⤿
             </h2>
             <p className="mt-1 text-xs text-muted-foreground tracking-widest uppercase">
               Gamer Profile
