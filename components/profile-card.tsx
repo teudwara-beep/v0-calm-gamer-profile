@@ -49,7 +49,7 @@ export function ProfileCard() {
             <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/30 to-indigo-500/20 blur-md animate-soft-glow" />
             
             {/* Avatar container with decoration overlay */}
-            <div className="relative h-28 w-28">
+            <div className="relative h-28 w-28 flex items-center justify-center">
               {/* Main avatar image */}
               <motion.div
                 initial={{ opacity: 0 }}
@@ -83,18 +83,20 @@ export function ProfileCard() {
               {/* Avatar decoration overlay (Nitro effect) */}
               {decorationUrl && !loading && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
-                  className="absolute -inset-3 pointer-events-none"
+                  className="absolute inset-0 pointer-events-none flex items-center justify-center"
                 >
-                  <Image
-                    src={decorationUrl}
-                    alt="Avatar decoration"
-                    fill
-                    className="object-contain"
-                    unoptimized // Required for animated GIFs and external URLs
-                  />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={decorationUrl}
+                      alt="Avatar decoration"
+                      fill
+                      className="object-contain drop-shadow-lg"
+                      unoptimized // Required for animated GIFs and external URLs
+                    />
+                  </div>
                 </motion.div>
               )}
             </div>
