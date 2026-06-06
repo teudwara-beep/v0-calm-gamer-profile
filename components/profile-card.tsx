@@ -26,27 +26,21 @@ export function ProfileCard() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="w-full max-w-md mx-auto"
     >
-      {/* Frosted glass card with enhanced calm aesthetic */}
-      <div className="relative rounded-2xl border border-border/50 bg-gradient-to-br from-card/50 via-card/30 to-card/40 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
+      <div className="relative rounded-2xl border border-border/50 bg-gradient-to-br from-card/40 via-card/20 to-card/30 backdrop-blur-xl p-8 overflow-hidden shadow-2xl">
         
-        {/* Background Video */}
+        {/* Background Video inside card */}
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20 rounded-2xl"
+          className="absolute inset-0 h-full w-full object-cover opacity-30 rounded-2xl"
         >
           <source src="/profile-bg.mp4" type="video/mp4" />
         </video>
 
-        {/* Subtle gradient overlay - deeper, more peaceful */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-40"
-          style={{
-            background: "linear-gradient(135deg, oklch(0.75 0.08 280 / 15%) 0%, transparent 50%, oklch(0.65 0.06 310 / 8%) 100%)"
-          }}
-        />
+        {/* Subtle overlay on top of card video */}
+        <div className="absolute inset-0 pointer-events-none bg-background/20 rounded-2xl" />
         
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
@@ -57,12 +51,9 @@ export function ProfileCard() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="relative"
           >
-            {/* Soft glow ring */}
             <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/30 to-indigo-500/20 blur-md animate-soft-glow" />
             
-            {/* Avatar container with decoration overlay */}
             <div className="relative h-28 w-28">
-              {/* Main avatar image */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -89,7 +80,6 @@ export function ProfileCard() {
                 )}
               </motion.div>
               
-              {/* Avatar decoration overlay (Nitro effect) */}
               {decorationUrl && !loading && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -108,7 +98,6 @@ export function ProfileCard() {
               )}
             </div>
             
-            {/* Online status indicator */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -172,7 +161,7 @@ export function ProfileCard() {
         </div>
       </div>
       
-      {/* Ambient glow beneath card - enhanced */}
+      {/* Ambient glow beneath card */}
       <div 
         className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-20 blur-3xl opacity-40 pointer-events-none"
         style={{
