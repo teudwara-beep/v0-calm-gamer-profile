@@ -91,8 +91,8 @@ export function ProfileCard() {
                   <img
   src={decorationUrl}
   alt=""
-  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-  style={{ top: '-12px', left: '-12px', width: 'calc(100% + 24px)', height: 'calc(100% + 24px)' }}
+  className="absolute inset-0 w-full h-full object-contain"
+  style={{ mixBlendMode: 'normal' }}
 />
                 </motion.div>
               )}
