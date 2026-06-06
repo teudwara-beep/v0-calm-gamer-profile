@@ -27,7 +27,13 @@ export function ProfileCard() {
       className="w-full max-w-md mx-auto"
     >
       <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70"
-        
+        {/* Smooth inner border glow */}
+<div className="absolute inset-0 rounded-[32px] pointer-events-none"
+  style={{
+    background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, transparent 60%)",
+    boxShadow: "inset 0 1px 1px rgba(255,255,255,0.05)"
+  }}
+/>
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-6">
           {/* Avatar with Discord decoration */}
