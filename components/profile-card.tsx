@@ -116,7 +116,7 @@ export function ProfileCard() {
             className="text-center"
           >
             <h2 className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl font-semibold text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-              ⤿ {profile.username}
+               {profile.username} ⤿
             </h2>
             <p className="mt-1 text-xs text-muted-foreground tracking-widest uppercase">
               Gamer Profile
