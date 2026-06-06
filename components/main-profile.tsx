@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ProfileCard } from "./profile-card";
+import { ViewCounter } from "./view-counter";
 
 interface MainProfileProps {
   onBack: () => void;
