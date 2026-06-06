@@ -93,6 +93,7 @@ export function ProfileCard() {
   alt=""
   className="absolute inset-0 w-full h-full object-contain"
   style={{ mixBlendMode: 'normal' }}
+  onError={(e) => { e.currentTarget.style.display = 'none' }}
 />
                 </motion.div>
               )}
