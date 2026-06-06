@@ -324,7 +324,7 @@ export function DiscordPresence() {
               {/* Spotify text */}
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
-                  Now Playing
+                  Now Listening
                 </span>
                 <span className="text-sm text-foreground font-medium tracking-wide truncate">
                   {spotifyActivity.text}
