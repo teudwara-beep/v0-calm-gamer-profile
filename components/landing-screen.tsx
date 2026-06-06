@@ -1,6 +1,40 @@
 "use client";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
+function TypingText({ text, delay = 0, speed = 80 }: { text: string; delay?: number; speed?: number }) {
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const startTimer = setTimeout(() => setStarted(true), delay);
+    return () => clearTimeout(startTimer);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    setDisplayed("");
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, speed);
+    return () => clearInterval(interval);
+  }, [started, text, speed]);
+
+  return (
+    <span>
+      {displayed}
+      {displayed.length < text.length && (
+        <span className="animate-pulse opacity-60">|</span>
+      )}
+    </span>
+  );
+}
 interface LandingScreenProps {
   onEnter: () => void;
 }
