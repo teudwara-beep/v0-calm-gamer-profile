@@ -232,8 +232,8 @@ export function DiscordPresence() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative rounded-lg bg-white/5 backdrop-blur-sm p-3"
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="relative rounded-lg bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-lg p-3 border border-border/50 transition-all duration-500 ease-in-out hover:border-lavender/40 hover:bg-gradient-to-r hover:from-white/15 hover:to-white/8"
           >
             <div className="flex items-center gap-3">
               {/* Game icon with status badge */}
@@ -246,16 +246,16 @@ export function DiscordPresence() {
                     crossOrigin="anonymous"
                   />
                   <span
-                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-calm-pulse`}
                   />
                 </div>
               ) : (
                 <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-white/10 flex items-center justify-center">
                   <svg className="w-5 h-5 text-foreground/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.959.401v0a.656.656 0 00.659-.663 47.703 47.703 0 00-.31-4.82 47.944 47.944 0 00-4.163.3.64.64 0 01-.657-.643v0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .36.129.703.35.992m5.25 7.5H2.25M6 20.25a.75.75 0 100-1.5.75.75 0 000 1.5z" />
                   </svg>
                   <span
-                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                    className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-calm-pulse`}
                   />
                 </div>
               )}
@@ -289,8 +289,8 @@ export function DiscordPresence() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: "easeOut", delay: hasGame ? 0.08 : 0 }}
-            className="relative rounded-lg bg-black/30 backdrop-blur-sm p-3"
+            transition={{ duration: 0.3, ease: "easeOut", delay: hasGame ? 0.08 : 0 }}
+            className="relative rounded-lg bg-gradient-to-r from-black/50 to-black/30 backdrop-blur-lg p-3 border border-border/50 transition-all duration-500 ease-in-out hover:border-lavender/40 hover:bg-gradient-to-r hover:from-black/60 hover:to-black/40"
           >
             <div className="flex items-center gap-3">
               {/* Album art with status badge (only if no game) */}
@@ -304,7 +304,7 @@ export function DiscordPresence() {
                   />
                   {!hasGame && (
                     <span
-                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-calm-pulse`}
                     />
                   )}
                 </div>
@@ -315,7 +315,7 @@ export function DiscordPresence() {
                   </svg>
                   {!hasGame && (
                     <span
-                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+                      className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]} animate-calm-pulse`}
                     />
                   )}
                 </div>
@@ -353,19 +353,19 @@ export function DiscordPresence() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative rounded-lg bg-white/5 backdrop-blur-sm p-3"
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="relative rounded-lg bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-lg p-3 border border-border/50 transition-all duration-500 ease-in-out hover:border-lavender/40 hover:bg-gradient-to-r hover:from-white/15 hover:to-white/8"
           >
             <div className="flex items-center gap-3">
               {/* Status dot */}
               <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-white/5 flex items-center justify-center">
                 <div className="relative">
                   <span
-                    className={`h-3 w-3 rounded-full ${statusColors[status]} animate-breathe block`}
+                    className={`h-3 w-3 rounded-full ${statusColors[status]} animate-calm-pulse block`}
                   />
                   <span
-                    className={`absolute inset-0 h-3 w-3 rounded-full ${statusColors[status]} opacity-40 animate-ping`}
-                    style={{ animationDuration: "3s" }}
+                    className={`absolute inset-0 h-3 w-3 rounded-full ${statusColors[status]} opacity-25 animate-ping`}
+                    style={{ animationDuration: "2.5s" }}
                   />
                 </div>
               </div>
@@ -391,4 +391,52 @@ export function DiscordPresence() {
       </AnimatePresence>
     </div>
   );
+}
+export function useDiscordStatus() {
+  const [status, setStatus] = useState<"online"|"idle"|"dnd"|"offline">("offline");
+
+  useEffect(() => {
+    let ws: WebSocket | null = null;
+    let heartbeatInterval: NodeJS.Timeout | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+
+    const connect = () => {
+      ws = new WebSocket("wss://api.lanyard.rest/socket");
+
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.op === 1) {
+          heartbeatInterval = setInterval(() => {
+            if (ws?.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ op: 3 }));
+            }
+          }, message.d.heartbeat_interval);
+          ws?.send(JSON.stringify({
+            op: 2,
+            d: { subscribe_to_id: siteConfig.discordId },
+          }));
+        }
+        if (message.op === 0 && (message.t === "INIT_STATE" || message.t === "PRESENCE_UPDATE")) {
+          setStatus(message.d.discord_status);
+        }
+      };
+
+      ws.onclose = () => {
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
+        reconnectTimeout = setTimeout(connect, 5000);
+      };
+
+      ws.onerror = () => ws?.close();
+    };
+
+    connect();
+
+    return () => {
+      if (heartbeatInterval) clearInterval(heartbeatInterval);
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (ws) ws.close();
+    };
+  }, []);
+
+  return status;
 }
