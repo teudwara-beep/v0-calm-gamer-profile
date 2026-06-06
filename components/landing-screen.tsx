@@ -67,7 +67,9 @@ transition={{ duration: 1.2, ease: "easeInOut" }}
           transition={{ delay: 1.6, duration: 0.7 }}
           whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.12)" }}
           whileTap={{ scale: 0.97 }}
-          onClick={onEnter}
+          onClick={() => {
+  setTimeout(onEnter, 400);
+}}
           className="group relative mt-4 px-10 py-3.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white/70 text-xs font-light tracking-[0.3em] uppercase transition-all duration-500 hover:border-white/40 hover:text-white"
         >
           <span className="relative z-10">Enter Profile</span>
