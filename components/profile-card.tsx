@@ -86,7 +86,7 @@ export function ProfileCard() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
-                  className="absolute -inset-3 pointer-events-none"
+                  className="absolute -inset-3 pointer-events-none rounded-full overflow-hidden"
                 >
                   <img
   src={decorationUrl}
