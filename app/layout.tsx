@@ -15,7 +15,7 @@ const fredoka = Fredoka({
 })
 
 export const metadata: Metadata = {
-  title: 'Gamer Profile | Calm Vibes',
+  title: 'Theekz',
   description: 'A chill, lofi-inspired gamer profile portfolio',
   generator: 'v0.app',
   icons: {
