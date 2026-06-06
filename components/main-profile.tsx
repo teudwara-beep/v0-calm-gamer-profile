@@ -96,6 +96,7 @@ export function MainProfile({ onBack }: MainProfileProps) {
         <p className="text-xs text-white/20 tracking-widest">
           made with Theekshana
         </p>
+        <ViewCounter />
       </motion.footer>
     </motion.div>
   );
