@@ -88,11 +88,11 @@ export function MainProfile({ onBack }: MainProfileProps) {
 
       {/* Footer with slow pulse */}
       <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.2, 0.3, 0.2] }}
-        transition={{ delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-6 text-center"
-      >
+  initial={{ opacity: 0 }}
+  animate={{ opacity: [0.4, 0.6, 0.4] }}
+  transition={{ delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" }}
+  className="absolute bottom-6 text-center px-6 py-3 rounded-2xl bg-black/20 backdrop-blur-sm"
+>
         <p className="text-xs text-white/20 tracking-widest">
           made with Theekshana
         </p>
