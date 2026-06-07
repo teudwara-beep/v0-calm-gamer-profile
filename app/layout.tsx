@@ -48,6 +48,12 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable}`}>
       <body className="font-sans antialiased">
        <CursorEffect />
+        <MusicPlayer
+  songName="Criminal"
+  artist="Britney Spears"
+  version="slowed + reverb"
+  src="/bg-music.mp3"
+/>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
