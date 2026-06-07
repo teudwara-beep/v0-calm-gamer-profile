@@ -14,7 +14,7 @@ export function ViewCounter() {
   if (!views) return null;
 
   return (
-    className="flex items-center justify-center gap-2 text-white/50 text-sm tracking-[0.2em] mt-2"
+    <div className="flex items-center justify-center gap-2 text-white/50 text-sm tracking-[0.2em] mt-2">
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/50 animate-pulse" />
       <span>{views.toLocaleString()} views</span>
     </div>
