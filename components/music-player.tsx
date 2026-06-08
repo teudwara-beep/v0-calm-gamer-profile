@@ -113,7 +113,7 @@ return () => clearTimeout(timer);
               : "opacity-0 translate-y-2 pointer-events-none"
           }`}
         >
-          <div className="bg-[#0F172A]/80 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-2xl">
+          <div className="bg-[#0F172A]/80 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-2xl min-w-max">
             <div className="flex flex-col items-end">
               <p className="text-white/70 text-[11px] font-light tracking-wide">
                 {songName} — {artist}
