@@ -1,4 +1,4 @@
-"use client";
+'"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
@@ -130,7 +130,7 @@ export function MusicPlayer({
           {/* Volume button with slider */}
           <div className="relative">
             {showVolumeSlider && (
-              <div className="absolute bottom-full right-0 mb-3 p-3 bg-white/10 backdrop-blur-2xl rounded-xl border border-white/20 shadow-2xl">
+              <div className="absolute bottom-10 right-10 p-3 bg-white/10 backdrop-blur-2xl rounded-xl border border-white/20 shadow-2xl">
                 <input
                   type="range"
                   min="0"
