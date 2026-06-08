@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ProfileCard } from "./profile-card";
+import { MusicPlayer } from "./music-player";
 import { ViewCounter } from "./view-counter";
 
 interface MainProfileProps {
@@ -16,6 +17,12 @@ export function MainProfile({ onBack }: MainProfileProps) {
       transition={{ duration: 1, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
+      <MusicPlayer
+  songName="Criminal"
+  artist="Britney Spears"
+  version="slowed + reverb"
+  src="/bg-music.mp3"
+/>
       {/* Breathing animation wrapper */}
       <motion.div
         animate={{ scale: [1, 1.003, 1] }}
