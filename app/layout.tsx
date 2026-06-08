@@ -1,4 +1,3 @@
-import { MusicPlayer } from "@/components/music-player";
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Fredoka } from 'next/font/google'
