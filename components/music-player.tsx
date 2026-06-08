@@ -6,7 +6,7 @@ import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 interface MusicPlayerProps {
   songName?: string;
   artist?: string;
-  version?: string; // e.g., "slowed + reverb"
+  version?: string;
   src?: string;
 }
 
@@ -22,23 +22,21 @@ export function MusicPlayer({
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [volume, setVolume] = useState(0.3);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
-  // Fade in animation after 2 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-  setVisible(true);
-  if (audioRef.current) {
-    audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-  }
-}, 1000);
-return () => clearTimeout(timer);
+      setVisible(true);
+      if (audioRef.current) {
+        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Handle audio load/error
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
     const handleLoadStart = () => setIsLoading(true);
     const handleCanPlay = () => {
       setIsLoading(false);
@@ -50,11 +48,9 @@ return () => clearTimeout(timer);
       setHasError(true);
       setPlaying(false);
     };
-
     audio.addEventListener("loadstart", handleLoadStart);
     audio.addEventListener("canplay", handleCanPlay);
     audio.addEventListener("error", handleError);
-
     return () => {
       audio.removeEventListener("loadstart", handleLoadStart);
       audio.removeEventListener("canplay", handleCanPlay);
@@ -62,7 +58,6 @@ return () => clearTimeout(timer);
     };
   }, [volume]);
 
-  // Save volume preference
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -73,7 +68,6 @@ return () => clearTimeout(timer);
     if (hasError) return;
     const audio = audioRef.current;
     if (!audio) return;
-
     try {
       if (playing) {
         audio.pause();
@@ -88,14 +82,6 @@ return () => clearTimeout(timer);
     }
   };
 
-  const toggleMute = () => {
-    if (volume > 0) {
-      setVolume(0);
-    } else {
-      setVolume(0.3);
-    }
-  };
-
   return (
     <>
       <audio ref={audioRef} src={hasError ? undefined : src} loop />
@@ -105,7 +91,7 @@ return () => clearTimeout(timer);
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         }`}
       >
-        {/* Tooltip with song info & visualizer */}
+        {/* Tooltip */}
         <div
           className={`absolute bottom-16 right-0 mb-2 transition-all duration-500 ${
             playing && !hasError
@@ -121,7 +107,6 @@ return () => clearTimeout(timer);
               <p className="text-indigo-300/50 text-[9px] font-mono tracking-[0.2em] mt-0.5">
                 {version}
               </p>
-              {/* Calm animated bars */}
               <div className="flex gap-1 mt-2 items-end h-3">
                 {[0.6, 0.9, 0.5, 0.8, 0.4].map((height, i) => (
                   <div
@@ -140,38 +125,50 @@ return () => clearTimeout(timer);
           </div>
         </div>
 
-        {/* Main circular button group */}
+        {/* Buttons */}
         <div className="flex items-center gap-3">
-          {/* Volume control (optional, calm) */}
-          <button
-            onClick={toggleMute}
-            className="w-8 h-8 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:border-indigo-400/30 text-white/50 hover:text-white/80"
-            aria-label={volume === 0 ? "Unmute" : "Mute"}
-          >
-            {volume === 0 ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </button>
+          {/* Volume button with slider */}
+          <div className="relative">
+            {showVolumeSlider && (
+              <div className="absolute bottom-full right-0 mb-3 p-3 bg-white/10 backdrop-blur-2xl rounded-xl border border-white/20 shadow-2xl">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  className="volume-slider"
+                  style={{
+                    width: "80px",
+                    height: "3px",
+                    background: `linear-gradient(to right, rgba(167,139,250,0.8) ${volume * 100}%, rgba(255,255,255,0.2) ${volume * 100}%)`,
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            )}
+            <button
+              onClick={() => setShowVolumeSlider(!showVolumeSlider)}
+              className="w-8 h-8 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:border-indigo-400/30 text-white/50 hover:text-white/80"
+            >
+              {volume === 0 ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            </button>
+          </div>
 
-          {/* Main play/pause button */}
+          {/* Play/pause button */}
           <button
             onClick={togglePlay}
             disabled={hasError}
-            className={`
-              relative w-14 h-14 rounded-full backdrop-blur-xl flex items-center justify-center
-              transition-all duration-500 ease-out
-              ${
-                playing
-                  ? "bg-indigo-500/20 border-indigo-400/40 shadow-lg shadow-indigo-500/20"
-                  : "bg-white/5 border-white/15 hover:bg-white/10"
-              }
-              border  hover:scale-105 active:scale-95
-              disabled:opacity-50 disabled:cursor-not-allowed
-            `}
+            className={`relative w-14 h-14 rounded-full backdrop-blur-xl flex items-center justify-center transition-all duration-500 ease-out ${
+              playing
+                ? "bg-indigo-500/20 border-indigo-400/40"
+                : "bg-white/5 border-white/15 hover:bg-white/10"
+            } border hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed`}
             style={{
-              boxShadow: playing
-                ? "0 0 20px rgba(99,102,241,0.3)"
-                : "0 0 10px rgba(0,0,0,0.2)",
+              boxShadow: playing ? "0 0 20px rgba(99,102,241,0.3)" : "0 0 10px rgba(0,0,0,0.2)",
             }}
-            aria-label={playing ? "Pause" : "Play"}
           >
             {isLoading ? (
               <div className="w-4 h-4 border-2 border-white/40 border-t-indigo-400 rounded-full animate-spin" />
@@ -182,8 +179,6 @@ return () => clearTimeout(timer);
             ) : (
               <Play size={20} className="text-white/70 ml-0.5" />
             )}
-
-            {/* Pulsing ring when playing */}
             {playing && !hasError && (
               <span className="absolute inset-0 rounded-full animate-ping-slow border border-indigo-400/40" />
             )}
@@ -191,30 +186,35 @@ return () => clearTimeout(timer);
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes barPulse {
-          0% {
-            transform: scaleY(0.4);
-            opacity: 0.4;
-          }
-          100% {
-            transform: scaleY(1);
-            opacity: 1;
-          }
+          0% { transform: scaleY(0.4); opacity: 0.4; }
+          100% { transform: scaleY(1); opacity: 1; }
         }
         @keyframes ping-slow {
-          0% {
-            transform: scale(0.95);
-            opacity: 0.5;
-          }
-          100% {
-            transform: scale(1.3);
-            opacity: 0;
-          }
+          0% { transform: scale(0.95); opacity: 0.5; }
+          100% { transform: scale(1.3); opacity: 0; }
         }
-        .animate-ping-slow {
-          animation: ping-slow 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+        .animate-ping-slow { animation: ping-slow 1.8s cubic-bezier(0,0,0.2,1) infinite; }
+        .volume-slider { -webkit-appearance: none; appearance: none; background: transparent; }
+        .volume-slider:focus { outline: none; }
+        .volume-slider::-webkit-slider-thumb {
+          -webkit-appearance: none; appearance: none;
+          width: 12px; height: 12px;
+          background: linear-gradient(135deg, #a78bfa, #818cf8);
+          border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.5);
+          cursor: pointer; box-shadow: 0 0 6px rgba(167,139,250,0.5);
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
+        .volume-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.2); box-shadow: 0 0 12px rgba(167,139,250,0.8);
+        }
+        .volume-slider::-moz-range-thumb {
+          width: 12px; height: 12px;
+          background: linear-gradient(135deg, #a78bfa, #818cf8);
+          border-radius: 50%; border: none; cursor: pointer;
+        }
+        .volume-slider::-moz-range-track { height: 3px; background: transparent; }
       `}</style>
     </>
   );
