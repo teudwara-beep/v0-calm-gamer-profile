@@ -25,8 +25,13 @@ export function MusicPlayer({
 
   // Fade in animation after 2 seconds
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 2000);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+  setVisible(true);
+  if (audioRef.current) {
+    audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+  }
+}, 1000);
+return () => clearTimeout(timer);
   }, []);
 
   // Handle audio load/error
