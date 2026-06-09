@@ -1,33 +1,24 @@
-# v0-calm-gamer-profile
+ Theekz — Gamer Profile
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+A calm, lofi-inspired personal gamer profile built with Next.js.
 
-## Built with v0
+ Features
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+- Live Discord presence via Lanyard API
+- Real-time Spotify now listening
+- Animated background video
+- Custom star trail cursor
+- Music player with volume control
+- View counter
+- Smooth page transitions
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_HL5IRgEtwi0KnjNbz6zBeIHHUCqE)
+ Stack
 
-## Getting Started
+- Next.js
+- Tailwind CSS
+- Framer Motion
+- Lanyard API
 
-First, run the development server:
+ Live
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+[theekz.vercel.app](https://theekz.vercel.app)
