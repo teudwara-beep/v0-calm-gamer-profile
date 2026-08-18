@@ -39,7 +39,7 @@ const statusColors = {
   online: "bg-emerald-400",
   idle: "bg-amber-400",
   dnd: "bg-rose-400",
-  offline: "bg-muted-foreground",
+  offline: "bg-zinc-500",
 } as const;
 
 const ACTIVITY_TYPE = {
@@ -51,9 +51,10 @@ const ACTIVITY_TYPE = {
   COMPETING: 5,
 } as const;
 
+// External image URLs (mp:external/...) සහ සාමාන්‍ය Discord Asset Image URLs නිවැරදිව පෙන්වීම සඳහා
 function getAssetUrl(applicationId: string, assetId: string): string {
   if (assetId.startsWith("mp:external/")) {
-    const path = assetId.replace("mp:external/", "");
+    const path = assetId.replace(/^mp:external\//, "");
     return `https://media.discordapp.net/external/${path}`;
   }
   return `https://cdn.discordapp.com/app-assets/${applicationId}/${assetId}.png`;
@@ -133,7 +134,10 @@ export function DiscordPresence() {
     return () => {
       if (heartbeatInterval) clearInterval(heartbeatInterval);
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
-      if (ws) ws.close();
+      if (ws) {
+        ws.onclose = null; // Memory leaks වැළැක්වීම
+        ws.close();
+      }
     };
   }, [handlePresenceUpdate]);
 
@@ -200,7 +204,7 @@ export function DiscordPresence() {
   const hasSpotify = !!spotifyActivity;
 
   return (
-    <div className="flex flex-col space-y-3">
+    <div className="flex flex-col space-y-3 w-full max-w-sm mx-auto">
       {/* Game Activity Card */}
       <AnimatePresence mode="wait">
         {hasGame && gameActivity && (
@@ -210,7 +214,7 @@ export function DiscordPresence() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="relative rounded-lg bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-lg p-3 border border-border/50 hover:border-purple-500/40 transition-all"
+            className="relative rounded-xl bg-white/5 backdrop-blur-md p-3 border border-white/10 hover:border-white/20 transition-all shadow-lg"
           >
             <div className="flex items-center gap-3">
               <div className="relative flex-shrink-0">
@@ -218,15 +222,15 @@ export function DiscordPresence() {
                   <img
                     src={gameActivity.icon}
                     alt={gameActivity.text}
-                    className="h-11 w-11 rounded-lg object-cover shadow-md"
+                    className="h-10 w-10 rounded-lg object-cover shadow-md"
                     crossOrigin="anonymous"
                   />
                 ) : (
-                  <div className="h-11 w-11 rounded-lg bg-white/10 flex items-center justify-center">
-                    <span className="text-xl">🎮</span>
+                  <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center">
+                    <span className="text-lg">🎮</span>
                   </div>
                 )}
-                <span className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]}`} />
+                <span className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background ${statusColors[status]}`} />
               </div>
 
               <div className="flex flex-col min-w-0 flex-1">
@@ -236,7 +240,7 @@ export function DiscordPresence() {
                 )}
               </div>
 
-              {wsConnected && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" title="Live" />}
+              {wsConnected && <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" title="Live" />}
             </div>
           </motion.div>
         )}
@@ -251,7 +255,7 @@ export function DiscordPresence() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="relative rounded-lg bg-gradient-to-r from-emerald-950/30 to-black/40 backdrop-blur-lg p-3 border border-emerald-500/20 hover:border-emerald-500/40 transition-all"
+            className="relative rounded-xl bg-gradient-to-r from-emerald-950/20 to-black/30 backdrop-blur-md p-3 border border-emerald-500/20 hover:border-emerald-500/30 transition-all shadow-lg"
           >
             <div className="flex items-center gap-3">
               <div className="relative flex-shrink-0">
@@ -259,16 +263,16 @@ export function DiscordPresence() {
                   <img
                     src={spotifyActivity.icon}
                     alt={spotifyActivity.text}
-                    className="h-11 w-11 rounded-lg object-cover shadow-md"
+                    className="h-10 w-10 rounded-lg object-cover shadow-md"
                     crossOrigin="anonymous"
                   />
                 ) : (
-                  <div className="h-11 w-11 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                    <span className="text-xl">🎵</span>
+                  <div className="h-10 w-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                    <span className="text-lg">🎵</span>
                   </div>
                 )}
                 {!hasGame && (
-                  <span className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card ${statusColors[status]}`} />
+                  <span className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background ${statusColors[status]}`} />
                 )}
               </div>
 
@@ -280,7 +284,6 @@ export function DiscordPresence() {
                 )}
               </div>
 
-              {/* Music Equalizer Visualizer */}
               <div className="flex items-end gap-0.5 h-4 px-1">
                 {[0, 0.2, 0.4, 0.1, 0.3].map((delay, i) => (
                   <div
@@ -304,20 +307,20 @@ export function DiscordPresence() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="relative rounded-lg bg-white/5 backdrop-blur-lg p-3 border border-border/50"
+            className="relative rounded-xl bg-white/5 backdrop-blur-md p-3 border border-white/10 shadow-lg"
           >
             <div className="flex items-center gap-3">
-              <div className="relative flex-shrink-0 h-11 w-11 rounded-lg bg-white/5 flex items-center justify-center">
+              <div className="relative flex-shrink-0 h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center">
                 <span className={`h-3 w-3 rounded-full ${statusColors[status]} animate-pulse`} />
               </div>
 
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-sm text-foreground font-medium truncate">
-                  {loading ? "Loading..." : fallbackStatus.text}
+                  {loading ? "Loading status..." : fallbackStatus.text}
                 </span>
               </div>
 
-              {wsConnected && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" title="Live" />}
+              {wsConnected && <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" title="Live" />}
             </div>
           </motion.div>
         )}
@@ -333,6 +336,7 @@ export function useDiscordStatus() {
   useEffect(() => {
     let ws: WebSocket | null = null;
     let heartbeatInterval: NodeJS.Timeout | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
 
     const connect = () => {
       ws = new WebSocket("wss://api.lanyard.rest/socket");
@@ -353,14 +357,18 @@ export function useDiscordStatus() {
 
       ws.onclose = () => {
         if (heartbeatInterval) clearInterval(heartbeatInterval);
-        setTimeout(connect, 5000);
+        reconnectTimeout = setTimeout(connect, 5000);
       };
     };
 
     connect();
     return () => {
       if (heartbeatInterval) clearInterval(heartbeatInterval);
-      if (ws) ws.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (ws) {
+        ws.onclose = null;
+        ws.close();
+      }
     };
   }, []);
 
