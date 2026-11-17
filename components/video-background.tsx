@@ -4,12 +4,13 @@ export function VideoBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       <video
+        aria-hidden="true"
         autoPlay
         loop
         muted
         playsInline
         className="absolute inset-0 h-full w-full object-cover"
-        poster="/placeholder.svg?height=1080&width=1920"
+        poster="/profile-bg.webp"
       >
         <source src={siteConfig.videoSrc} type="video/mp4" />
       </video>

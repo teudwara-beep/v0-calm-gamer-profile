@@ -17,12 +17,6 @@ export function MainProfile({ onBack }: MainProfileProps) {
       transition={{ duration: 1, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
-      <MusicPlayer
-  songName="Criminal"
-  artist="Britney Spears"
-  version="slowed + reverb"
-  src="/bg-music.mp3"
-/>
       {/* Breathing animation wrapper */}
       <motion.div
         animate={{ scale: [1, 1.003, 1] }}
@@ -97,18 +91,18 @@ export function MainProfile({ onBack }: MainProfileProps) {
         <span className="text-sm font-light tracking-wide">Back</span>
       </motion.button>
 
-      {/* Footer with slow pulse */}
-      <motion.footer
-  initial={{ opacity: 0 }}
-  animate={{ opacity: [0.4, 0.6, 0.4] }}
-  transition={{ delay: 1, duration: 4, repeat: Infinity, ease: "easeInOut" }}
-  className="absolute bottom-6 text-center px-6 py-3 rounded-2xl bg-black/20 backdrop-blur-sm"
->
-        <p className="text-xs text-white/20 tracking-widest">
-          made with Theekshana
-        </p>
-        <ViewCounter />
-      </motion.footer>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between gap-3 px-4 pb-4 sm:justify-end sm:px-6 sm:pb-6">
+        <footer className="min-w-0 rounded-2xl bg-black/20 px-3 py-2 backdrop-blur-sm sm:absolute sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:text-center">
+          <p className="text-xs tracking-wide text-white/60">made with Theekshana</p>
+          <ViewCounter />
+        </footer>
+        <MusicPlayer
+          songName="Criminal"
+          artist="Britney Spears"
+          version="slowed + reverb"
+          src="/bg-music.mp3"
+        />
+      </div>
     </motion.div>
   );
 }
