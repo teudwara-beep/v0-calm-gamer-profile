@@ -1,22 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
+
+const viewBadge = "https://hits.sh/theekz.vercel.app.svg?label=views&color=272039&labelColor=272039";
 
 export function ViewCounter() {
-  const [views, setViews] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch("https://api.counterapi.dev/v1/theekz-profile/visits/up")
-      .then(res => res.json())
-      .then(data => setViews(data.count))
-      .catch(() => {});
-  }, []);
-
-  if (!views) return null;
+  const [unavailable, setUnavailable] = useState(false);
+  if (unavailable || process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") return null;
 
   return (
-    <div className="flex items-center justify-center gap-2 text-white/50 text-sm tracking-[0.2em] mt-2">
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/50 animate-pulse" />
-      <span>{views.toLocaleString()} views</span>
-    </div>
+    <img
+      src={viewBadge}
+      alt="Total profile views"
+      referrerPolicy="no-referrer"
+      className="mt-1 block h-5 w-auto sm:mx-auto"
+      onError={() => setUnavailable(true)}
+    />
   );
 }

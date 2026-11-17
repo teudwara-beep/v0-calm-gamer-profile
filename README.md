@@ -9,8 +9,8 @@ A calm, lofi-inspired personal gamer profile built with Next.js.
 - Real-time Spotify now listening
 - Animated background video
 - Custom star trail cursor
-- Music player with volume control
-- View counter
+- Music player with volume control and click-to-play audio
+- Profile view counter via Hits.sh
 - Smooth page transitions
 
  Stack

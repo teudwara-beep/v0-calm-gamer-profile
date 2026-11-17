@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface MusicPlayerProps {
@@ -17,46 +17,12 @@ export function MusicPlayer({
   src = "/bg-music.mp3",
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const volumeControlsId = useId();
   const [playing, setPlaying] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [volume, setVolume] = useState(0.3);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(true);
-      if (audioRef.current) {
-        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const handleLoadStart = () => setIsLoading(true);
-    const handleCanPlay = () => {
-      setIsLoading(false);
-      setHasError(false);
-      audio.volume = volume;
-    };
-    const handleError = () => {
-      setIsLoading(false);
-      setHasError(true);
-      setPlaying(false);
-    };
-    audio.addEventListener("loadstart", handleLoadStart);
-    audio.addEventListener("canplay", handleCanPlay);
-    audio.addEventListener("error", handleError);
-    return () => {
-      audio.removeEventListener("loadstart", handleLoadStart);
-      audio.removeEventListener("canplay", handleCanPlay);
-      audio.removeEventListener("error", handleError);
-    };
-  }, [volume]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -65,39 +31,49 @@ export function MusicPlayer({
   }, [volume]);
 
   const togglePlay = async () => {
-    if (hasError) return;
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || hasError) return;
+    if (!audio.paused) {
+      audio.pause();
+      return;
+    }
+
     try {
-      if (playing) {
-        audio.pause();
-        setPlaying(false);
-      } else {
-        await audio.play();
-        setPlaying(true);
-      }
-    } catch (err) {
-      console.warn("Audio play failed:", err);
-      setHasError(true);
+      setIsLoading(true);
+      await audio.play();
+    } catch {
+      setIsLoading(false);
     }
   };
 
   return (
     <>
-      <audio ref={audioRef} src={hasError ? undefined : src} loop />
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="none"
+        loop
+        onPlay={() => setPlaying(true)}
+        onPlaying={() => setIsLoading(false)}
+        onWaiting={() => setIsLoading(true)}
+        onPause={() => {
+          setPlaying(false);
+          setIsLoading(false);
+        }}
+        onError={() => {
+          setHasError(true);
+          setPlaying(false);
+          setIsLoading(false);
+        }}
+      />
 
-      <div
-        className={`fixed bottom-6 right-6 z-[9999] transition-all duration-1000 ease-out ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-        }`}
-      >
+      <div className="pointer-events-auto relative shrink-0">
         {/* Tooltip */}
         <div
-          className={`absolute bottom-16 right-0 mb-2 transition-all duration-500 ${
-            playing && !hasError
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 translate-y-2 pointer-events-none"
+          className={`pointer-events-none absolute bottom-16 right-0 mb-2 hidden transition-all duration-500 sm:block ${
+            playing ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
           }`}
+          aria-hidden={!playing}
         >
           <div className="bg-[#0F172A]/80 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-2xl min-w-max">
             <div className="flex flex-col items-end">
@@ -129,39 +105,42 @@ export function MusicPlayer({
         <div className="flex items-center gap-3">
           {/* Volume button with slider */}
           <div className="relative">
-            {showVolumeSlider && (
-              <div className="absolute bottom-0 right-10 p-3 bg-white/10 backdrop-blur-2xl rounded-xl border border-white/20 shadow-2xl">
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
-                  className="volume-slider"
-                  style={{
-                    width: "80px",
-                    height: "3px",
-                    background: `linear-gradient(to right, rgba(167,139,250,0.8) ${volume * 100}%, rgba(255,255,255,0.2) ${volume * 100}%)`,
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-            )}
             <button
-              onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-              className="w-8 h-8 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:border-indigo-400/30 text-white/50 hover:text-white/80"
+              onClick={() => setShowVolumeSlider((open) => !open)}
+              aria-label={showVolumeSlider ? "Hide volume controls" : "Show volume controls"}
+              aria-expanded={showVolumeSlider}
+              aria-controls={volumeControlsId}
+              className="h-11 w-11 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:border-indigo-400/30 text-white/70 hover:text-white"
             >
               {volume === 0 ? <VolumeX size={14} /> : <Volume2 size={14} />}
             </button>
+            <div id={volumeControlsId} hidden={!showVolumeSlider} className="absolute bottom-0 right-12 rounded-xl border border-white/20 bg-slate-950/95 p-2 shadow-2xl sm:right-14">
+              <input
+                type="range"
+                aria-label="Music volume"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={(e) => setVolume(parseFloat(e.target.value))}
+                className="volume-slider"
+                style={{
+                  width: "80px",
+                  height: "3px",
+                  background: `linear-gradient(to right, rgba(167,139,250,0.8) ${volume * 100}%, rgba(255,255,255,0.2) ${volume * 100}%)`,
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+              />
+            </div>
           </div>
 
           {/* Play/pause button */}
           <button
             onClick={togglePlay}
             disabled={hasError}
-            className={`relative w-14 h-14 rounded-full backdrop-blur-xl flex items-center justify-center transition-all duration-500 ease-out ${
+            aria-label={hasError ? "Music unavailable" : playing ? "Pause music" : "Play music"}
+            className={`relative h-11 w-11 sm:h-14 sm:w-14 rounded-full backdrop-blur-xl flex items-center justify-center transition-all duration-500 ease-out ${
               playing
                 ? "bg-indigo-500/20 border-indigo-400/40"
                 : "bg-white/5 border-white/15 hover:bg-white/10"
@@ -197,7 +176,7 @@ export function MusicPlayer({
         }
         .animate-ping-slow { animation: ping-slow 1.8s cubic-bezier(0,0,0.2,1) infinite; }
         .volume-slider { -webkit-appearance: none; appearance: none; background: transparent; }
-        .volume-slider:focus { outline: none; }
+        .volume-slider:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 4px; }
         .volume-slider::-webkit-slider-thumb {
           -webkit-appearance: none; appearance: none;
           width: 12px; height: 12px;
