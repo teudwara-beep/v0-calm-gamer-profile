@@ -24,9 +24,9 @@ A calm, lofi-inspired personal gamer profile built with Next.js.
 
 1. Generate an API key in the [HenrikDev dashboard](https://api.henrikdev.xyz/dashboard/).
 2. Add `HENRIKDEV_API_KEY` in the Vercel project's **Settings → Environment Variables** for **Production**. Include **Preview** if you want the card on preview deployments. For local development, put the variable in `.env.local`.
-3. Deploy with the variable set, then select **Enter Profile** to see the rank below Discord activity.
+3. Deploy with the variable set, then select **Enter Profile** while Discord shows you as playing VALORANT.
 
-The profile checks for updates every minute while open. The server caches successful rank lookups for five minutes. The card appears once an API key is configured. The Riot ID, region, and platform are set in `lib/config.ts`.
+The rank card appears below Discord activity while Lanyard reports that you are playing VALORANT and hides when that activity ends. The card checks for rank updates every minute while visible, and the server caches successful rank lookups for five minutes. The Riot ID, region, and platform are set in `lib/config.ts`.
 
  Live
 

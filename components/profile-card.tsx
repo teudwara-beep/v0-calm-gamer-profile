@@ -5,7 +5,6 @@ import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
-import { ValorantRank } from "./valorant-rank";
 import { useLanyard } from "@/hooks/use-lanyard";
 import { User } from "lucide-react";
 
@@ -130,10 +129,9 @@ export function ProfileCard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="w-full max-w-xs space-y-3"
+            className="w-full flex justify-center"
           >
             <DiscordPresence />
-            <ValorantRank />
           </motion.div>
           
           {/* Divider */}
