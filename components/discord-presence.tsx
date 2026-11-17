@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/lib/config";
+import { ValorantRank } from "./valorant-rank";
 
 interface Activity {
   name: string;
@@ -66,13 +67,16 @@ export function DiscordPresence() {
   const [data, setData] = useState<LanyardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [wsConnected, setWsConnected] = useState(false);
+  const [hasCurrentPresence, setHasCurrentPresence] = useState(false);
 
   const handlePresenceUpdate = useCallback((newData: LanyardData) => {
     setData(newData);
     setLoading(false);
+    setHasCurrentPresence(true);
   }, []);
 
   useEffect(() => {
+    const initialRequest = new AbortController();
     let ws: WebSocket | null = null;
     let heartbeatInterval: NodeJS.Timeout | null = null;
     let reconnectTimeout: NodeJS.Timeout | null = null;
@@ -103,6 +107,7 @@ export function DiscordPresence() {
 
           case 0:
             if (message.t === "INIT_STATE" || message.t === "PRESENCE_UPDATE") {
+              initialRequest.abort();
               handlePresenceUpdate(message.d);
             }
             break;
@@ -111,6 +116,7 @@ export function DiscordPresence() {
 
       ws.onclose = () => {
         setWsConnected(false);
+        setHasCurrentPresence(false);
         if (heartbeatInterval) clearInterval(heartbeatInterval);
         reconnectTimeout = setTimeout(connect, 5000);
       };
@@ -121,12 +127,15 @@ export function DiscordPresence() {
     const fetchInitial = async () => {
       try {
         const res = await fetch(
-          `https://api.lanyard.rest/v1/users/${siteConfig.discordId}`
+          `https://api.lanyard.rest/v1/users/${siteConfig.discordId}`,
+          { signal: initialRequest.signal }
         );
         const json = await res.json();
-        if (json.success) handlePresenceUpdate(json.data);
+        if (json.success && !initialRequest.signal.aborted) handlePresenceUpdate(json.data);
       } catch (error) {
-        console.error("Failed to fetch initial Discord presence:", error);
+        if (!initialRequest.signal.aborted) {
+          console.error("Failed to fetch initial Discord presence:", error);
+        }
       }
     };
 
@@ -134,6 +143,7 @@ export function DiscordPresence() {
     connect();
 
     return () => {
+      initialRequest.abort();
       if (heartbeatInterval) clearInterval(heartbeatInterval);
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
       if (ws) {
@@ -204,6 +214,9 @@ export function DiscordPresence() {
 
   const hasGame = !!gameActivity;
   const hasSpotify = !!spotifyActivity;
+  const isPlayingValorant = hasCurrentPresence && status !== "offline" && data?.activities.some(
+    (activity) => activity.type === ACTIVITY_TYPE.GAME && activity.name.trim().toLowerCase() === "valorant"
+  );
 
   return (
     <div className="flex flex-col space-y-3 w-full max-w-xs mx-auto">
@@ -307,6 +320,8 @@ export function DiscordPresence() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {isPlayingValorant && <ValorantRank />}
 
       {/* Fallback Status */}
       <AnimatePresence mode="wait">
