@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { TouchEvent, WheelEvent } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
 function TypingText({ text, delay = 0, speed = 80 }: { text: string; delay?: number; speed?: number }) {
@@ -38,13 +39,61 @@ function TypingText({ text, delay = 0, speed = 80 }: { text: string; delay?: num
 interface LandingScreenProps {
   onEnter: () => void;
 }
+
+const swipeThreshold = 48;
+
 export function LandingScreen({ onEnter }: LandingScreenProps) {
+  const entered = useRef(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
+  const enter = useCallback(() => {
+    if (entered.current) return;
+    entered.current = true;
+    onEnter();
+  }, [onEnter]);
+
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.key === "ArrowDown" || event.key === "PageDown") {
+        event.preventDefault();
+        enter();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [enter]);
+
+  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (!event.ctrlKey && event.deltaY > Math.abs(event.deltaX)) enter();
+  };
+
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null;
+  };
+
+  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    const touch = event.changedTouches[0];
+    if (!start || !touch || event.touches.length > 0) return;
+
+    const distance = start.y - touch.clientY;
+    if (distance >= swipeThreshold && distance > Math.abs(start.x - touch.clientX)) enter();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, y: -30, scale: 1.02 }}
       transition={{ duration: 1.2, ease: "easeInOut" }}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => { touchStart.current = null; }}
+      style={{ touchAction: "pan-x pinch-zoom" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
       {/* Soft dark overlay */}
@@ -104,7 +153,7 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
           transition={{ delay: 1.7, duration: 0.7 }}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => { setTimeout(onEnter, 400); }}
+          onClick={enter}
           className="relative mt-6 px-10 py-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-white/60 text-[10px] font-light tracking-[0.35em] uppercase transition-all duration-500 hover:border-white/30 hover:text-white/90 hover:bg-white/8"
           style={{ boxShadow: "0 0 30px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08)" }}
         >
@@ -114,10 +163,11 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
 
       {/* Scroll indicator */}
       <motion.div
+        aria-hidden="true"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.div
           animate={{ y: [0, 8, 0], opacity: [0.2, 0.5, 0.2] }}

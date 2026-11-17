@@ -1,34 +1,52 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import type { RefObject } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface MusicPlayerProps {
+  audioRef: RefObject<HTMLAudioElement | null>;
   songName?: string;
   artist?: string;
   version?: string;
-  src?: string;
 }
 
 export function MusicPlayer({
+  audioRef,
   songName = "Criminal",
   artist = "Britney Spears",
   version = "slowed + reverb",
-  src = "/bg-music.mp3",
 }: MusicPlayerProps) {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const volumeControlsId = useId();
   const [playing, setPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [volume, setVolume] = useState(0.3);
+  const [volume, setVolume] = useState(() => audioRef.current?.volume ?? 1);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const syncPlayback = () => {
+      const playing = !audio.paused && !audio.error;
+      setPlaying(playing);
+      setIsLoading(playing && audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA);
+      setHasError(audio.error !== null);
+    };
+    const events = ["play", "playing", "waiting", "pause", "error"];
+
+    syncPlayback();
+    for (const event of events) audio.addEventListener(event, syncPlayback);
+    return () => {
+      for (const event of events) audio.removeEventListener(event, syncPlayback);
+    };
+  }, [audioRef]);
+
+  const changeVolume = (nextVolume: number) => {
+    if (audioRef.current) audioRef.current.volume = nextVolume;
+    setVolume(nextVolume);
+  };
 
   const togglePlay = async () => {
     const audio = audioRef.current;
@@ -48,25 +66,6 @@ export function MusicPlayer({
 
   return (
     <>
-      <audio
-        ref={audioRef}
-        src={src}
-        preload="none"
-        loop
-        onPlay={() => setPlaying(true)}
-        onPlaying={() => setIsLoading(false)}
-        onWaiting={() => setIsLoading(true)}
-        onPause={() => {
-          setPlaying(false);
-          setIsLoading(false);
-        }}
-        onError={() => {
-          setHasError(true);
-          setPlaying(false);
-          setIsLoading(false);
-        }}
-      />
-
       <div className="pointer-events-auto relative shrink-0">
         {/* Tooltip */}
         <div
@@ -122,7 +121,7 @@ export function MusicPlayer({
                 max="1"
                 step="0.01"
                 value={volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
+                onChange={(e) => changeVolume(e.currentTarget.valueAsNumber)}
                 className="volume-slider"
                 style={{
                   width: "80px",

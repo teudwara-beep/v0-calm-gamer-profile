@@ -1,16 +1,21 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useIsPresent } from "framer-motion";
+import type { RefObject } from "react";
 import { ProfileCard } from "./profile-card";
 import { MusicPlayer } from "./music-player";
 import { ViewCounter } from "./view-counter";
 
 interface MainProfileProps {
   onBack: () => void;
+  audioRef: RefObject<HTMLAudioElement | null>;
 }
 
-export function MainProfile({ onBack }: MainProfileProps) {
+export function MainProfile({ onBack, audioRef }: MainProfileProps) {
+  const isPresent = useIsPresent();
+
   return (
     <motion.div
+      inert={!isPresent}
       initial={{ opacity: 0, scale: 0.995 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.995 }}
@@ -96,12 +101,7 @@ export function MainProfile({ onBack }: MainProfileProps) {
           <p className="text-xs tracking-wide text-white/60">made with Theekshana</p>
           <ViewCounter />
         </footer>
-        <MusicPlayer
-          songName="Criminal"
-          artist="Britney Spears"
-          version="slowed + reverb"
-          src="/bg-music.mp3"
-        />
+        <MusicPlayer audioRef={audioRef} />
       </div>
     </motion.div>
   );
