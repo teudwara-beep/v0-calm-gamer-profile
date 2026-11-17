@@ -5,6 +5,7 @@ import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence } from "./discord-presence";
 import { SocialLinks } from "./social-icons";
+import { ValorantRank } from "./valorant-rank";
 import { useLanyard } from "@/hooks/use-lanyard";
 import { User } from "lucide-react";
 
@@ -24,9 +25,9 @@ export function ProfileCard() {
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="w-full max-w-md mx-auto"
+      className="relative w-full max-w-md mx-auto"
     >
-      <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70">
+      <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-5 sm:p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70">
 {/* Card background video */}
 <video
   autoPlay
@@ -46,7 +47,7 @@ export function ProfileCard() {
         />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-6">
+        <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-6">
           {/* Avatar with Discord decoration */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -124,14 +125,15 @@ export function ProfileCard() {
             </p>
           </motion.div>
           
-          {/* Discord Presence */}
+          {/* Discord and VALORANT activity */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="w-full flex justify-center"
+            className="w-full max-w-xs space-y-3"
           >
             <DiscordPresence />
+            <ValorantRank />
           </motion.div>
           
           {/* Divider */}

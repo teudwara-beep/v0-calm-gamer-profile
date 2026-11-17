@@ -70,7 +70,11 @@ export function MainProfile({ onBack }: MainProfileProps) {
         />
 
         {/* Profile Card */}
-        <ProfileCard />
+        <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:px-6">
+          <div className="flex min-h-full items-center py-3">
+            <ProfileCard />
+          </div>
+        </div>
       </motion.div>
 
       {/* Back button */}

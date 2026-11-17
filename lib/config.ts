@@ -9,6 +9,13 @@ export const siteConfig = {
   // Discord ID for Lanyard API
   // Replace with your Discord User ID
   discordId: "1138828023748120656",
+
+  valorant: {
+    name: "Theekz",
+    tag: "4392",
+    region: "ap",
+    platform: "pc",
+  },
   
   // Profile information
   profile: {
