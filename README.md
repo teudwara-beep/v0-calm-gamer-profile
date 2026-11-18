@@ -5,6 +5,7 @@ A calm, lofi-inspired personal gamer profile built with Next.js.
  Features
 
 - Live Discord presence via Lanyard API
+- Live profile-card name, color, and display effects from Discord
 - Auto-updating VALORANT competitive rank and RR for Theekz#4392 (AP, PC)
 - Real-time Spotify now listening
 - Animated background video
@@ -27,6 +28,8 @@ A calm, lofi-inspired personal gamer profile built with Next.js.
 3. Deploy with the variable set, then select **Enter Profile** while Discord shows you as playing VALORANT.
 
 The rank card appears below Discord activity while Lanyard reports that you are playing VALORANT and hides when that activity ends. The card checks for rank updates every minute while visible, and the server caches successful rank lookups for five minutes. The Riot ID, region, and platform are set in `lib/config.ts`.
+
+The Vice City display style uses [Deluxe Ducks](https://typodermicfonts.com/public-domain/), a public-domain typeface by Ray Larabie. Other supported Discord fonts use their public Google Fonts editions.
 
  Live
 

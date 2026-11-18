@@ -17,12 +17,19 @@ interface Activity {
   };
 }
 
+export interface DiscordDisplayNameStyle {
+  font_id?: number;
+  effect_id?: number;
+  colors?: number[];
+}
+
 interface DiscordUser {
   id: string;
   username: string;
   avatar: string | null;
   discriminator: string;
   global_name?: string | null;
+  display_name_styles?: DiscordDisplayNameStyle | null;
   avatar_decoration_data?: {
     asset: string;
     sku_id: string;

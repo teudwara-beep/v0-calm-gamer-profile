@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { DiscordPresence } from "./discord-presence";
+import { DiscordDisplayName } from "./discord-display-name";
 import { SocialLinks } from "./social-icons";
 import { useLanyard } from "@/hooks/use-lanyard";
 import { User } from "lucide-react";
@@ -118,9 +119,7 @@ export function ProfileCard() {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="max-w-full text-center"
           >
-            <h2 className="wrap-anywhere text-2xl font-semibold text-foreground sm:text-3xl" style={{ fontFamily: 'var(--font-display)' }}>
-              {displayName}
-            </h2>
+            <DiscordDisplayName name={displayName} appearance={discordUser?.display_name_styles} />
             <p className="mt-1 text-xs text-muted-foreground tracking-widest uppercase">
               Gamer Profile
             </p>

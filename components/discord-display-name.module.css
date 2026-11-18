@@ -1,0 +1,71 @@
+.name {
+  color: var(--name-color);
+}
+
+.viceCity {
+  -webkit-text-stroke: 0.045em currentColor;
+}
+
+.gradient,
+.prism,
+.gummy {
+  background-image: linear-gradient(105deg, var(--name-gradient));
+  background-clip: text;
+  color: transparent;
+}
+
+.neon {
+  color: color-mix(in srgb, var(--name-color) 65%, white);
+  text-shadow: 0 0 0.23em var(--name-color), 0 0 0.48em var(--name-color);
+}
+
+.toon {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--name-color) 55%, white), var(--name-color));
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0.03em color-mix(in srgb, var(--name-color) 70%, black);
+}
+
+.pop {
+  color: color-mix(in srgb, var(--name-color) 85%, white);
+  text-shadow: 0.075em 0.08em color-mix(in srgb, var(--name-color) 60%, black);
+}
+
+.prism {
+  background-size: 220% 100%;
+  animation: sweep 3.5s ease-in-out infinite alternate;
+}
+
+.gummy {
+  display: inline-block;
+  max-width: 100%;
+  animation: bounce 3s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@keyframes bounce {
+  0%, 58%, 100% { transform: scale(1); }
+  72% { transform: scale(1.025, 0.96); }
+  84% { transform: scale(0.985, 1.035); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prism,
+  .gummy {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .name {
+    color: CanvasText;
+    background: none;
+    text-shadow: none;
+    -webkit-text-stroke: 0;
+    animation: none;
+  }
+}
