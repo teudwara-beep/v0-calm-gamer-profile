@@ -17,7 +17,9 @@ const statusColors = {
 
 export function ProfileCard() {
   const { profile, socials } = siteConfig;
-  const { avatarUrl, decorationUrl, status, loading } = useLanyard();
+  const { data, avatarUrl, decorationUrl, status, loading } = useLanyard();
+  const discordUser = data?.discord_user;
+  const displayName = discordUser?.global_name?.trim() || discordUser?.username || profile.username;
 
   return (
     <motion.div
@@ -70,7 +72,7 @@ export function ProfileCard() {
                 ) : avatarUrl ? (
                   <Image
                     src={avatarUrl}
-                    alt={profile.username}
+                    alt={displayName}
                     fill
                     className="object-cover"
                     priority
@@ -109,15 +111,15 @@ export function ProfileCard() {
             />
           </motion.div>
           
-          {/* Username */}
+          {/* Display name */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="text-center"
+            className="max-w-full text-center"
           >
-            <h2 className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl font-semibold text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-              {profile.username} ⤿
+            <h2 className="wrap-anywhere text-2xl font-semibold text-foreground sm:text-3xl" style={{ fontFamily: 'var(--font-display)' }}>
+              {displayName}
             </h2>
             <p className="mt-1 text-xs text-muted-foreground tracking-widest uppercase">
               Gamer Profile

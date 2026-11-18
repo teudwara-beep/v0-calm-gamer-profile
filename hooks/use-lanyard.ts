@@ -22,7 +22,7 @@ interface DiscordUser {
   username: string;
   avatar: string | null;
   discriminator: string;
-  global_name?: string;
+  global_name?: string | null;
   avatar_decoration_data?: {
     asset: string;
     sku_id: string;
@@ -60,6 +60,7 @@ export function useLanyard(): UseLanyardReturn {
   }, []);
 
   useEffect(() => {
+    const initialRequest = new AbortController();
     let ws: WebSocket | null = null;
     let heartbeatInterval: NodeJS.Timeout | null = null;
     let reconnectTimeout: NodeJS.Timeout | null = null;
@@ -94,6 +95,7 @@ export function useLanyard(): UseLanyardReturn {
 
           case 0: // Event
             if (message.t === "INIT_STATE" || message.t === "PRESENCE_UPDATE") {
+              initialRequest.abort();
               handlePresenceUpdate(message.d);
             }
             break;
@@ -116,14 +118,17 @@ export function useLanyard(): UseLanyardReturn {
     const fetchInitial = async () => {
       try {
         const res = await fetch(
-          `https://api.lanyard.rest/v1/users/${siteConfig.discordId}`
+          `https://api.lanyard.rest/v1/users/${siteConfig.discordId}`,
+          { signal: initialRequest.signal }
         );
         const json = await res.json();
-        if (json.success) {
+        if (json.success && !initialRequest.signal.aborted) {
           handlePresenceUpdate(json.data);
         }
       } catch (error) {
-        console.error("Failed to fetch initial Discord presence:", error);
+        if (!initialRequest.signal.aborted) {
+          console.error("Failed to fetch initial Discord presence:", error);
+        }
       }
     };
 
@@ -131,9 +136,13 @@ export function useLanyard(): UseLanyardReturn {
     connect();
 
     return () => {
+      initialRequest.abort();
       if (heartbeatInterval) clearInterval(heartbeatInterval);
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
-      if (ws) ws.close();
+      if (ws) {
+        ws.onclose = null;
+        ws.close();
+      }
     };
   }, [handlePresenceUpdate]);
 
