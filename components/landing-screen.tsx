@@ -88,7 +88,7 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, y: -9 }}
-      transition={{ duration: 0.9, ease: "easeInOut" }}
+      transition={{ duration: 0.55, ease: "easeInOut" }}
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -96,9 +96,6 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
       style={{ touchAction: "pan-x pinch-zoom" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
-      {/* Soft dark overlay */}
-      <div className="absolute inset-0 bg-black/55 backdrop-blur-[3px]" />
-
       {/* Main content */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -154,7 +151,7 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={enter}
-          className="relative mt-6 px-10 py-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-white/60 text-[10px] font-light tracking-[0.35em] uppercase transition-all duration-500 hover:border-white/30 hover:text-white/90 hover:bg-white/8"
+          className="relative mt-6 rounded-full border border-lavender/35 bg-[#17192b]/45 px-10 py-3 text-[11px] font-medium tracking-[0.26em] text-[#e3daef] uppercase backdrop-blur-md transition-colors duration-300 hover:border-lavender/60 hover:bg-[#25213a]/75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lavender"
           style={{ boxShadow: "0 0 30px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.08)" }}
         >
           Enter Profile

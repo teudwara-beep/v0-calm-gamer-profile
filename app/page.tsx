@@ -60,10 +60,10 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative isolate min-h-screen overflow-hidden">
       <audio ref={audioRef} src="/bg-music.mp3" preload="none" loop />
       {/* Video Background - always visible */}
-      <VideoBackground />
+      <VideoBackground profileOpen={currentPage === "profile"} />
       
       {/* Page Content with smooth transitions */}
       <MotionConfig reducedMotion="user">
