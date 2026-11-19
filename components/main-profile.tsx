@@ -32,8 +32,12 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
       />
 
       <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:px-6">
-        <div className="flex min-h-full items-center py-3">
+        <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-4 py-3">
           <ProfileCard />
+          <footer className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-2 text-xs leading-5 text-zinc-400">
+            <p>by <span className="font-medium text-[#cbbfe3]">Theekshana</span></p>
+            <ViewCounter />
+          </footer>
         </div>
       </div>
 
@@ -57,13 +61,7 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
         <span className="text-sm font-light tracking-wide">Back</span>
       </motion.button>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between gap-3 px-4 pb-4 sm:justify-end sm:px-6 sm:pb-6">
-        <footer className="min-w-0 rounded-2xl bg-black/20 px-3 py-2 backdrop-blur-sm sm:absolute sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:text-center">
-          <p className="text-xs leading-4 tracking-wide text-zinc-300/80">
-            by <span className="font-medium text-[#d2c3f3]">Theekshana</span>
-          </p>
-          <ViewCounter />
-        </footer>
+      <div className="pointer-events-none absolute right-4 bottom-4 z-30 sm:right-6 sm:bottom-6">
         <MusicPlayer audioRef={audioRef} onVolumeChange={onVolumeChange} />
       </div>
     </motion.div>
