@@ -59,7 +59,9 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex items-end justify-between gap-3 px-4 pb-4 sm:justify-end sm:px-6 sm:pb-6">
         <footer className="min-w-0 rounded-2xl bg-black/20 px-3 py-2 backdrop-blur-sm sm:absolute sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:text-center">
-          <p className="text-xs tracking-wide text-white/60">made with Theekshana</p>
+          <p className="text-xs leading-4 tracking-wide text-zinc-300/80">
+            by <span className="font-medium text-[#d2c3f3]">Theekshana</span>
+          </p>
           <ViewCounter />
         </footer>
         <MusicPlayer audioRef={audioRef} onVolumeChange={onVolumeChange} />
