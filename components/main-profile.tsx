@@ -8,81 +8,42 @@ import { ViewCounter } from "./view-counter";
 interface MainProfileProps {
   onBack: () => void;
   audioRef: RefObject<HTMLAudioElement | null>;
+  onVolumeChange: (volume: number) => void;
 }
 
-export function MainProfile({ onBack, audioRef }: MainProfileProps) {
+export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfileProps) {
   const isPresent = useIsPresent();
 
   return (
     <motion.div
       inert={!isPresent}
-      initial={{ opacity: 0, scale: 0.995 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.995 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
-      {/* Breathing animation wrapper */}
-      <motion.div
-        animate={{ scale: [1, 1.003, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute inset-0 flex flex-col items-center justify-center"
-      >
-        {/* Animated calm gradient background */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <motion.div
-            animate={{
-              background: [
-                "radial-gradient(ellipse at 20% 50%, oklch(0.25 0.08 280) 0%, oklch(0.10 0.03 260) 50%, oklch(0.08 0.02 240) 100%)",
-                "radial-gradient(ellipse at 80% 30%, oklch(0.22 0.07 300) 0%, oklch(0.10 0.03 270) 50%, oklch(0.08 0.02 250) 100%)",
-                "radial-gradient(ellipse at 50% 80%, oklch(0.20 0.06 260) 0%, oklch(0.10 0.03 280) 50%, oklch(0.08 0.02 260) 100%)",
-                "radial-gradient(ellipse at 20% 50%, oklch(0.25 0.08 280) 0%, oklch(0.10 0.03 260) 50%, oklch(0.08 0.02 240) 100%)",
-              ]
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0"
-          />
-          {/* Subtle noise/star layer with drift */}
-          <motion.div
-            animate={{ x: [0, -5, 0, 5, 0], y: [0, -3, 0, 3, 0] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 opacity-[0.15]"
-            style={{
-              backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px)",
-              backgroundSize: "90px 90px",
-            }}
-          />
-          {/* Vignette */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%)"
-            }}
-          />
-        </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[#0c101b]"
+        style={{
+          backgroundImage: "radial-gradient(ellipse at 18% 18%, rgba(105,78,147,0.22), transparent 62%), radial-gradient(ellipse at 90% 80%, rgba(53,79,110,0.18), transparent 60%)",
+        }}
+      />
 
-        {/* Soft glow behind profile card */}
-        <motion.div
-          animate={{ opacity: [0.4, 0.7, 0.4] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute w-[320px] h-[320px] rounded-full bg-gradient-to-br from-violet-300/5 to-blue-300/5 blur-3xl"
-        />
-
-        {/* Profile Card */}
-        <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:px-6">
-          <div className="flex min-h-full items-center py-3">
-            <ProfileCard />
-          </div>
+      <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:px-6">
+        <div className="flex min-h-full items-center py-3">
+          <ProfileCard />
         </div>
-      </motion.div>
+      </div>
 
       {/* Back button */}
       <motion.button
-        initial={{ opacity: 0, x: -20 }}
+        initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
+        transition={{ delay: 0.25, duration: 0.5 }}
         onClick={onBack}
-        className="absolute top-8 left-8 flex items-center gap-2 text-white/40 hover:text-white/80 transition-colors duration-300 group z-30"
+        className="absolute top-8 left-8 flex items-center gap-2 text-white/65 hover:text-white/90 transition-colors duration-300 group z-30"
       >
         <svg
           className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform duration-300"
@@ -101,7 +62,7 @@ export function MainProfile({ onBack, audioRef }: MainProfileProps) {
           <p className="text-xs tracking-wide text-white/60">made with Theekshana</p>
           <ViewCounter />
         </footer>
-        <MusicPlayer audioRef={audioRef} />
+        <MusicPlayer audioRef={audioRef} onVolumeChange={onVolumeChange} />
       </div>
     </motion.div>
   );

@@ -6,6 +6,7 @@ import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface MusicPlayerProps {
   audioRef: RefObject<HTMLAudioElement | null>;
+  onVolumeChange: (volume: number) => void;
   songName?: string;
   artist?: string;
   version?: string;
@@ -13,6 +14,7 @@ interface MusicPlayerProps {
 
 export function MusicPlayer({
   audioRef,
+  onVolumeChange,
   songName = "Criminal",
   artist = "Britney Spears",
   version = "slowed + reverb",
@@ -35,16 +37,20 @@ export function MusicPlayer({
       setHasError(audio.error !== null);
     };
     const events = ["play", "playing", "waiting", "pause", "error"];
+    const syncVolume = () => setVolume(Math.round(audio.volume * 100) / 100);
 
     syncPlayback();
+    syncVolume();
     for (const event of events) audio.addEventListener(event, syncPlayback);
+    audio.addEventListener("volumechange", syncVolume);
     return () => {
       for (const event of events) audio.removeEventListener(event, syncPlayback);
+      audio.removeEventListener("volumechange", syncVolume);
     };
   }, [audioRef]);
 
   const changeVolume = (nextVolume: number) => {
-    if (audioRef.current) audioRef.current.volume = nextVolume;
+    onVolumeChange(nextVolume);
     setVolume(nextVolume);
   };
 
@@ -86,11 +92,11 @@ export function MusicPlayer({
                 {[0.6, 0.9, 0.5, 0.8, 0.4].map((height, i) => (
                   <div
                     key={i}
-                    className="w-1 bg-indigo-400/60 rounded-full transition-all duration-300"
+                      className="music-meter-bar w-1 rounded-full bg-indigo-300/45"
                     style={{
                       height: playing ? `${height * 12}px` : "3px",
                       animation: playing
-                        ? `barPulse ${0.6 + i * 0.1}s ease-in-out infinite alternate`
+                        ? `barPulse ${1.6 + i * 0.14}s ease-in-out infinite alternate`
                         : "none",
                     }}
                   />
@@ -157,23 +163,18 @@ export function MusicPlayer({
             ) : (
               <Play size={20} className="text-white/70 ml-0.5" />
             )}
-            {playing && !hasError && (
-              <span className="absolute inset-0 rounded-full animate-ping-slow border border-indigo-400/40" />
-            )}
           </button>
         </div>
       </div>
 
       <style>{`
         @keyframes barPulse {
-          0% { transform: scaleY(0.4); opacity: 0.4; }
+          0% { transform: scaleY(0.65); opacity: 0.7; }
           100% { transform: scaleY(1); opacity: 1; }
         }
-        @keyframes ping-slow {
-          0% { transform: scale(0.95); opacity: 0.5; }
-          100% { transform: scale(1.3); opacity: 0; }
+        @media (prefers-reduced-motion: reduce) {
+          .music-meter-bar { animation: none !important; }
         }
-        .animate-ping-slow { animation: ping-slow 1.8s cubic-bezier(0,0,0.2,1) infinite; }
         .volume-slider { -webkit-appearance: none; appearance: none; background: transparent; }
         .volume-slider:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 4px; }
         .volume-slider::-webkit-slider-thumb {

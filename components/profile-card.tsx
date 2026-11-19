@@ -24,40 +24,40 @@ export function ProfileCard() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.75, ease: "easeOut" }}
       className="relative w-full max-w-md mx-auto"
     >
-      <div className="relative rounded-[32px] border border-indigo-500/12 bg-slate-900/55 backdrop-blur-xl p-5 sm:p-8 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:border-indigo-500/25 hover:bg-slate-900/70">
-{/* Card background video */}
-<video
-  autoPlay
-  loop
-  muted
-  playsInline
-  className="absolute inset-0 h-full w-full object-cover opacity-20"
->
-  <source src="/card-bg.mp4" type="video/mp4" />
-</video>
+      <div className="relative overflow-hidden rounded-[32px] border border-[#c6b7f4]/18 bg-[#141726]/80 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.75),0_0_28px_-14px_rgba(181,159,244,0.28)] backdrop-blur-2xl sm:p-8">
+        <video
+          aria-hidden="true"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-10 motion-reduce:hidden"
+        >
+          <source src="/card-bg.mp4" type="video/mp4" />
+        </video>
         {/* Smooth inner border glow */}
         <div className="absolute inset-0 rounded-[32px] pointer-events-none"
           style={{
-            background: "linear-gradient(135deg, rgba(99,102,241,0.08) 0%, transparent 60%)",
-            boxShadow: "inset 0 1px 1px rgba(255,255,255,0.05)"
+            background: "linear-gradient(155deg, rgba(208,190,255,0.11), transparent 48%, rgba(9,11,21,0.3))",
+            boxShadow: "inset 0 1px 0 rgba(241,233,255,0.07)"
           }}
         />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-6">
+        <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5">
           {/* Avatar with Discord decoration */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.97, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            transition={{ delay: 0.1, duration: 0.7 }}
             className="relative"
           >
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/30 to-indigo-500/20 blur-md animate-soft-glow" />
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/20 to-indigo-500/12 blur-md animate-soft-glow" />
             
             <div className="relative h-28 w-28">
               <motion.div
@@ -88,7 +88,7 @@ export function ProfileCard() {
               
               {decorationUrl && !loading && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
                   className="absolute -inset-3 pointer-events-none"
@@ -105,22 +105,22 @@ export function ProfileCard() {
             </div>
             
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4, duration: 0.3, type: "spring" }}
-              className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-card ${statusColors[status]} animate-breathe`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.4 }}
+              className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-[#191c2c] ${statusColors[status]}`}
             />
           </motion.div>
           
           {/* Display name */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
             className="max-w-full text-center"
           >
             <DiscordDisplayName name={displayName} appearance={discordUser?.display_name_styles} />
-            <p className="mt-1 text-xs text-muted-foreground tracking-widest uppercase">
+            <p className="mt-1 text-[10px] tracking-[0.18em] text-zinc-300/80 uppercase">
               Gamer Profile
             </p>
           </motion.div>
@@ -140,7 +140,7 @@ export function ProfileCard() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="w-full h-px bg-gradient-to-r from-transparent via-lavender/40 to-transparent"
+            className="w-full h-px bg-gradient-to-r from-transparent via-lavender/30 to-transparent"
           />
           
           {/* Bio */}
@@ -148,14 +148,14 @@ export function ProfileCard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="text-sm text-muted-foreground text-center leading-relaxed font-light"
+            className="max-w-[34ch] text-center text-sm leading-relaxed text-pretty text-zinc-300"
           >
             {profile.bio}
           </motion.p>
           
           {/* Social Links */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
             className="pt-2"
@@ -165,13 +165,6 @@ export function ProfileCard() {
         </div>
       </div>
       
-      {/* Ambient glow beneath card */}
-      <div 
-        className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-20 blur-3xl opacity-40 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, oklch(0.75 0.08 280 / 60%) 0%, oklch(0.65 0.06 310 / 20%) 50%, transparent 100%)"
-        }}
-      />
     </motion.div>
   );
 }

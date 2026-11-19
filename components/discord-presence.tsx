@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/lib/config";
 import { ValorantRank } from "./valorant-rank";
+import { Gamepad2, Music2 } from "lucide-react";
+import activityStyles from "./activity-card.module.css";
 
 interface Activity {
   name: string;
@@ -37,9 +39,9 @@ interface ActivityInfo {
 }
 
 const statusColors = {
-  online: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]",
-  idle: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]",
-  dnd: "bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]",
+  online: "bg-emerald-400",
+  idle: "bg-amber-400",
+  dnd: "bg-rose-400",
   offline: "bg-zinc-500",
 } as const;
 
@@ -219,40 +221,38 @@ export function DiscordPresence() {
   );
 
   return (
-    <div className="flex flex-col space-y-3 w-full max-w-xs mx-auto">
+    <div className="mx-auto flex w-full max-w-xs flex-col gap-2.5">
       {/* Game Activity Card */}
       <AnimatePresence mode="wait">
         {hasGame && gameActivity && (
           <motion.div
             key="game-activity"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="group relative overflow-hidden rounded-2xl bg-zinc-900/40 backdrop-blur-xl p-3.5 border border-purple-500/20 hover:border-purple-500/40 transition-all shadow-lg shadow-purple-900/10"
+            className={activityStyles.card}
           >
-            {/* Subtle Neon Background Glow */}
-            <div className="absolute -top-10 -left-10 h-24 w-24 rounded-full bg-purple-500/10 blur-xl pointer-events-none group-hover:bg-purple-500/20 transition-all" />
 
-            <div className="flex items-center gap-3.5 relative z-10">
+            <div className="flex items-center gap-3">
               <div className="relative flex-shrink-0">
                 {gameActivity.icon ? (
                   <img
                     src={gameActivity.icon}
                     alt={gameActivity.text}
-                    className="h-11 w-11 rounded-xl object-cover ring-1 ring-white/10 shadow-md"
+                    className="h-11 w-11 rounded-xl object-cover ring-1 ring-white/10"
                     crossOrigin="anonymous"
                   />
                 ) : (
-                  <div className="h-11 w-11 rounded-xl bg-purple-500/10 ring-1 ring-purple-500/20 flex items-center justify-center">
-                    <span className="text-xl">🎮</span>
+                  <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${activityStyles.icon}`}>
+                    <Gamepad2 aria-hidden="true" className="h-5 w-5" />
                   </div>
                 )}
                 <span className={`absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-zinc-950 ${statusColors[status]}`} />
               </div>
 
               <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-[10px] font-bold tracking-widest text-purple-400 uppercase">Gaming</span>
+                <span className={`text-[10px] font-semibold tracking-widest uppercase ${activityStyles.label}`}>Gaming</span>
                 <span className="text-xs font-semibold text-zinc-100 truncate">{gameActivity.text}</span>
                 {gameActivity.subtext && (
                   <span className="text-[11px] text-zinc-400 truncate">{gameActivity.subtext}</span>
@@ -260,7 +260,7 @@ export function DiscordPresence() {
               </div>
 
               {wsConnected && (
-                <span className="h-2 w-2 rounded-full bg-purple-400 animate-ping opacity-75" title="Live Sync" />
+                <span className={`h-1.5 w-1.5 shrink-0 rounded-full opacity-75 ${activityStyles.dot}`} title="Live Sync" />
               )}
             </div>
           </motion.div>
@@ -272,25 +272,24 @@ export function DiscordPresence() {
         {hasSpotify && spotifyActivity && (
           <motion.div
             key="spotify-activity"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="group relative overflow-hidden rounded-2xl bg-emerald-950/20 backdrop-blur-xl p-3.5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all shadow-lg shadow-emerald-900/10"
+            className={activityStyles.card + " " + activityStyles.spotify}
           >
-            <div className="absolute -top-10 -left-10 h-24 w-24 rounded-full bg-emerald-500/10 blur-xl pointer-events-none group-hover:bg-emerald-500/20 transition-all" />
 
-            <div className="flex items-center gap-3.5 relative z-10">
+            <div className="flex items-center gap-3">
               <div className="relative flex-shrink-0">
                 {spotifyActivity.icon ? (
                   <img
                     src={spotifyActivity.icon}
                     alt={spotifyActivity.text}
-                    className="h-11 w-11 rounded-xl object-cover ring-1 ring-white/10 shadow-md animate-[spin_10s_linear_infinite]"
+                    className="h-11 w-11 rounded-xl object-cover ring-1 ring-white/10"
                   />
                 ) : (
-                  <div className="h-11 w-11 rounded-xl bg-emerald-500/10 ring-1 ring-emerald-500/20 flex items-center justify-center">
-                    <span className="text-xl">🎵</span>
+                  <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${activityStyles.icon}`}>
+                    <Music2 aria-hidden="true" className="h-5 w-5" />
                   </div>
                 )}
                 {!hasGame && (
@@ -299,23 +298,13 @@ export function DiscordPresence() {
               </div>
 
               <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">Listening Now</span>
+                <span className={`text-[10px] font-semibold tracking-widest uppercase ${activityStyles.label}`}>Listening Now</span>
                 <span className="text-xs font-semibold text-zinc-100 truncate">{spotifyActivity.text}</span>
                 {spotifyActivity.subtext && (
                   <span className="text-[11px] text-zinc-400 truncate">{spotifyActivity.subtext}</span>
                 )}
               </div>
 
-              {/* Animated Equalizer Visualizer */}
-              <div className="flex items-end gap-0.5 h-4 px-1">
-                {[0, 0.2, 0.4, 0.1, 0.3].map((delay, i) => (
-                  <div
-                    key={i}
-                    className="w-0.5 bg-emerald-400 rounded-full animate-bounce"
-                    style={{ animationDelay: `${delay}s`, animationDuration: '0.8s' }}
-                  />
-                ))}
-              </div>
             </div>
           </motion.div>
         )}
@@ -328,14 +317,14 @@ export function DiscordPresence() {
         {!hasGame && !hasSpotify && (
           <motion.div
             key="fallback-status"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative overflow-hidden rounded-2xl bg-zinc-900/30 backdrop-blur-xl p-3 border border-white/5 shadow-md"
+            className={activityStyles.card}
           >
             <div className="flex items-center gap-3">
-              <div className="relative flex-shrink-0 h-9 w-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${activityStyles.icon}`}>
                 <span className={`h-2.5 w-2.5 rounded-full ${statusColors[status]}`} />
               </div>
 

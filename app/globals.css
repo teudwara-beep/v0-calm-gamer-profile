@@ -101,22 +101,6 @@
   }
 }
 
-/* Breathing animation for status indicator */
-@keyframes breathe {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-}
-
-.animate-breathe {
-  animation: breathe 3s ease-in-out infinite;
-}
-
 /* Calm pulse - subtle online indicator animation */
 @keyframes calm-pulse {
   0%, 100% {
@@ -135,16 +119,17 @@
 
 /* Soft glow effect */
 @keyframes soft-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px oklch(0.72 0.09 285 / 35%);
-  }
-  50% {
-    box-shadow: 0 0 25px oklch(0.72 0.09 285 / 55%);
-  }
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 0.85; }
 }
 
 .animate-soft-glow {
-  animation: soft-glow 4s ease-in-out infinite;
+  opacity: 0.72;
+  animation: soft-glow 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-soft-glow { animation: none; }
 }
 
 /* Enhanced transitions for premium feel */

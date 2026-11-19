@@ -87,8 +87,8 @@ export function LandingScreen({ onEnter }: LandingScreenProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, y: -30, scale: 1.02 }}
-      transition={{ duration: 1.2, ease: "easeInOut" }}
+      exit={{ opacity: 0, y: -9 }}
+      transition={{ duration: 0.9, ease: "easeInOut" }}
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
