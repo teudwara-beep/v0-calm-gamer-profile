@@ -20,18 +20,10 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1, ease: "easeInOut" }}
+      transition={{ duration: 0.55, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[#0c101b]"
-        style={{
-          backgroundImage: "radial-gradient(ellipse at 18% 18%, rgba(105,78,147,0.22), transparent 62%), radial-gradient(ellipse at 90% 80%, rgba(53,79,110,0.18), transparent 60%)",
-        }}
-      />
-
-      <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:px-6">
+      <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:bottom-24 sm:px-6 lg:bottom-28">
         <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-4 py-3">
           <ProfileCard />
           <footer className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-2 text-xs leading-5 text-zinc-400">
@@ -61,7 +53,7 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
         <span className="text-sm font-light tracking-wide">Back</span>
       </motion.button>
 
-      <div className="pointer-events-none absolute right-4 bottom-4 z-30 sm:right-6 sm:bottom-6">
+      <div className="pointer-events-none absolute right-4 bottom-4 left-4 z-30 flex justify-end sm:right-6 sm:bottom-6 lg:right-10 lg:bottom-9">
         <MusicPlayer audioRef={audioRef} onVolumeChange={onVolumeChange} />
       </div>
     </motion.div>
