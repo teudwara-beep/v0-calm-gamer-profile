@@ -1,10 +1,19 @@
 "use client";
-import { motion, useIsPresent } from "framer-motion";
-import type { RefObject } from "react";
+import { motion, useIsPresent, useSpring } from "framer-motion";
+import type { MotionStyle, MotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
+import type { PointerEvent, RefObject } from "react";
 import { ProfileCard } from "./profile-card";
 import { ProfileSkyDetails } from "./profile-sky-details";
 import { MusicPlayer } from "./music-player";
 import { ViewCounter } from "./view-counter";
+
+const desktopDepth = "(min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+const depthSpring = { stiffness: 120, damping: 24, mass: 0.65 };
+type SceneStyle = MotionStyle & {
+  "--scene-x": MotionValue<number>;
+  "--scene-y": MotionValue<number>;
+};
 
 interface MainProfileProps {
   onBack: () => void;
@@ -14,6 +23,36 @@ interface MainProfileProps {
 
 export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfileProps) {
   const isPresent = useIsPresent();
+  const depthMedia = useRef<MediaQueryList | null>(null);
+  const sceneX = useSpring(0, depthSpring);
+  const sceneY = useSpring(0, depthSpring);
+  const sceneStyle: SceneStyle = { "--scene-x": sceneX, "--scene-y": sceneY };
+
+  useEffect(() => {
+    const media = window.matchMedia(desktopDepth);
+    depthMedia.current = media;
+    const reset = () => {
+      sceneX.jump(0);
+      sceneY.jump(0);
+    };
+    media.addEventListener("change", reset);
+    return () => media.removeEventListener("change", reset);
+  }, [sceneX, sceneY]);
+
+  function trackPointer(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== "mouse" || !depthMedia.current?.matches) return;
+
+    const halfWidth = window.innerWidth / 2;
+    const halfHeight = window.innerHeight / 2;
+    const x = (event.clientX - halfWidth) / Math.min(halfWidth, 620);
+    sceneX.set(Math.max(-1, Math.min(1, x)));
+    sceneY.set((event.clientY - halfHeight) / halfHeight);
+  }
+
+  function settleScene() {
+    sceneX.set(0);
+    sceneY.set(0);
+  }
 
   return (
     <motion.div
@@ -24,7 +63,13 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
       transition={{ duration: 0.55, ease: "easeInOut" }}
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
-      <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:bottom-24 sm:px-6 lg:bottom-28">
+      <motion.div
+        onPointerMove={trackPointer}
+        onPointerLeave={settleScene}
+        onPointerCancel={settleScene}
+        style={sceneStyle}
+        className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:bottom-24 sm:px-6 lg:bottom-28"
+      >
         <ProfileSkyDetails />
         <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-4 py-3">
           <ProfileCard />
@@ -33,7 +78,7 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
             <ViewCounter />
           </footer>
         </div>
-      </div>
+      </motion.div>
 
       {/* Back button */}
       <motion.button

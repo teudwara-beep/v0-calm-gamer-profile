@@ -1,0 +1,57 @@
+.backPlate,
+.reflection {
+  display: none;
+}
+
+.glassTint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgb(208 190 255 / 11%), transparent 48%, rgb(9 11 21 / 30%));
+  box-shadow: inset 0 1px 0 rgb(241 233 255 / 7%);
+}
+
+@media (min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .perspective {
+    perspective: 1100px;
+  }
+
+  .card {
+    transform: rotateX(calc(var(--scene-y, 0) * -8deg)) rotateY(calc(var(--scene-x, 0) * 9deg));
+    transform-style: preserve-3d;
+  }
+
+  .backPlate {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border: 1px solid rgb(185 173 241 / 18%);
+    border-radius: 34px;
+    background: linear-gradient(145deg, #23263b, #141827 65%, #242740);
+    box-shadow: 0 22px 42px -22px rgb(0 0 0 / 65%), inset 0 -1px 0 rgb(191 178 239 / 10%);
+    transform: translate3d(4px, 12px, -22px);
+    pointer-events: none;
+  }
+
+  .reflection {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background:
+      radial-gradient(
+        ellipse 67% 66% at calc(50% + var(--scene-x, 0) * 49%) calc(16% + var(--scene-y, 0) * 56%),
+        rgb(196 182 244 / 21%),
+        rgb(155 160 223 / 5%) 58%,
+        transparent
+      ),
+      linear-gradient(132deg, rgb(205 196 245 / 9%), transparent 28% 73%, rgb(151 170 232 / 6%));
+  }
+
+  .content {
+    transform: translateZ(16px);
+    transform-style: preserve-3d;
+  }
+
+  .avatar {
+    translate: 0 0 16px;
+  }
+}

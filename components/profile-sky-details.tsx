@@ -51,34 +51,38 @@ export function ProfileSkyDetails() {
   return (
     <>
       <div aria-hidden="true" className={`${styles.skyDetail} ${styles.constellation}`}>
-        <span className={styles.detailGlow} />
-        <div className={styles.links}>
-          {links.map(([from, to]) => {
-            const start = constellationStars[from];
-            const end = constellationStars[to];
-            const dx = end.x - start.x;
-            const dy = end.y - start.y;
+        <div className={styles.skyPlane}>
+          <span className={styles.detailGlow} />
+          <div className={styles.links}>
+            {links.map(([from, to]) => {
+              const start = constellationStars[from];
+              const end = constellationStars[to];
+              const dx = end.x - start.x;
+              const dy = end.y - start.y;
 
-            return (
-              <span
-                key={`${from}-${to}`}
-                className={styles.link}
-                style={{
-                  left: start.x,
-                  top: start.y,
-                  width: Math.hypot(dx, dy),
-                  transform: `rotate(${Math.atan2(dy, dx)}rad)`,
-                }}
-              />
-            );
-          })}
+              return (
+                <span
+                  key={`${from}-${to}`}
+                  className={styles.link}
+                  style={{
+                    left: start.x,
+                    top: start.y,
+                    width: Math.hypot(dx, dy),
+                    transform: `rotate(${Math.atan2(dy, dx)}rad)`,
+                  }}
+                />
+              );
+            })}
+          </div>
+          <Stars points={constellationStars} />
         </div>
-        <Stars points={constellationStars} />
       </div>
       <div aria-hidden="true" className={`${styles.skyDetail} ${styles.moonScene}`}>
-        <span className={styles.detailGlow} />
-        <span className={styles.moon} />
-        <Stars points={moonStars} />
+        <div className={styles.skyPlane}>
+          <span className={styles.detailGlow} />
+          <span className={styles.moon} />
+          <Stars points={moonStars} />
+        </div>
       </div>
     </>
   );
