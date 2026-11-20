@@ -1,26 +1,39 @@
-.constellation {
+.skyDetail {
   display: none;
 }
 
 @media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
-  .constellation {
+  .skyDetail {
     position: absolute;
     z-index: 1;
     top: 48%;
-    left: calc(50% - 24rem);
     display: block;
     width: 208px;
     height: 136px;
     transform: translate(-50%, -50%);
   }
+
+  .constellation {
+    left: calc(50% - 24rem);
+  }
+
+  .moonScene {
+    left: calc(50% + 24rem);
+  }
+}
+
+.moon,
+.moonGlow,
+.links,
+.stars {
+  position: absolute;
+  pointer-events: none;
+  transition: opacity 560ms ease-in-out;
 }
 
 .links,
 .stars {
-  position: absolute;
   inset: 0;
-  pointer-events: none;
-  transition: opacity 560ms ease-in-out;
 }
 
 .links {
@@ -35,7 +48,7 @@
   opacity: 0.68;
 }
 
-.constellation:hover .stars {
+.skyDetail:hover .stars {
   opacity: 1;
 }
 
@@ -54,7 +67,40 @@
   box-shadow: 0 0 7px 1px rgb(183 162 238 / 40%);
 }
 
+.moon,
+.moonGlow {
+  top: 46%;
+  left: 49%;
+  transform: translate(-50%, -50%);
+}
+
+.moon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #e4dafa, #a3b4e1);
+  mask-image: radial-gradient(circle 16px at 67% 35%, transparent 96%, black);
+  opacity: 0.48;
+}
+
+.moonGlow {
+  width: 96px;
+  height: 96px;
+  background: radial-gradient(circle, rgb(164 166 239 / 24%), transparent 68%);
+  opacity: 0.24;
+}
+
+.moonScene:hover .moon {
+  opacity: 0.8;
+}
+
+.moonScene:hover .moonGlow {
+  opacity: 0.85;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .moon,
+  .moonGlow,
   .links,
   .stars {
     transition: none;

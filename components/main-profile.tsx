@@ -2,7 +2,7 @@
 import { motion, useIsPresent } from "framer-motion";
 import type { RefObject } from "react";
 import { ProfileCard } from "./profile-card";
-import { ProfileConstellation } from "./profile-constellation";
+import { ProfileSkyDetails } from "./profile-sky-details";
 import { MusicPlayer } from "./music-player";
 import { ViewCounter } from "./view-counter";
 
@@ -25,7 +25,7 @@ export function MainProfile({ onBack, audioRef, onVolumeChange }: MainProfilePro
       className="fixed inset-0 z-20 flex flex-col items-center justify-center px-6"
     >
       <div className="absolute inset-x-0 top-16 bottom-20 overflow-y-auto overscroll-contain px-4 sm:bottom-24 sm:px-6 lg:bottom-28">
-        <ProfileConstellation />
+        <ProfileSkyDetails />
         <div className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-4 py-3">
           <ProfileCard />
           <footer className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-2 text-xs leading-5 text-zinc-400">
