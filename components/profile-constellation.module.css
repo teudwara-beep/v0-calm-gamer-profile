@@ -1,0 +1,62 @@
+.constellation {
+  display: none;
+}
+
+@media (min-width: 64rem) and (hover: hover) and (pointer: fine) {
+  .constellation {
+    position: absolute;
+    z-index: 1;
+    top: 48%;
+    left: calc(50% - 24rem);
+    display: block;
+    width: 208px;
+    height: 136px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.links,
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 560ms ease-in-out;
+}
+
+.links {
+  opacity: 0;
+}
+
+.stars {
+  opacity: 0.78;
+}
+
+.constellation:hover .links {
+  opacity: 0.68;
+}
+
+.constellation:hover .stars {
+  opacity: 1;
+}
+
+.link {
+  position: absolute;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #b9a8e966, #dccef38c, #b9a8e966);
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #e4dafa;
+  box-shadow: 0 0 7px 1px rgb(183 162 238 / 40%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .links,
+  .stars {
+    transition: none;
+  }
+}
