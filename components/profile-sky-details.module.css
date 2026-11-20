@@ -1,4 +1,6 @@
 .skyDetail {
+  --sky-light: 228 218 250;
+  --sky-glow: 174 165 236;
   display: none;
 }
 
@@ -23,7 +25,7 @@
 }
 
 .moon,
-.moonGlow,
+.detailGlow,
 .links,
 .stars {
   position: absolute;
@@ -45,10 +47,14 @@
 }
 
 .constellation:hover .links {
-  opacity: 0.68;
+  opacity: 0.64;
 }
 
 .skyDetail:hover .stars {
+  opacity: 1;
+}
+
+.skyDetail:hover .detailGlow {
   opacity: 1;
 }
 
@@ -56,51 +62,52 @@
   position: absolute;
   height: 1px;
   transform-origin: left center;
-  background: linear-gradient(90deg, #b9a8e966, #dccef38c, #b9a8e966);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--sky-light) / 32%),
+    rgb(var(--sky-light) / 56%),
+    rgb(var(--sky-light) / 32%)
+  );
 }
 
 .star {
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background: #e4dafa;
-  box-shadow: 0 0 7px 1px rgb(183 162 238 / 40%);
+  background: rgb(var(--sky-light));
+  box-shadow: 0 0 7px 1px rgb(var(--sky-glow) / 40%);
 }
 
 .moon,
-.moonGlow {
-  top: 46%;
-  left: 49%;
+.detailGlow {
+  top: 48%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .moon {
-  width: 34px;
-  height: 34px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #e4dafa, #a3b4e1);
-  mask-image: radial-gradient(circle 16px at 67% 35%, transparent 96%, black);
-  opacity: 0.48;
+  background: linear-gradient(145deg, rgb(var(--sky-light)), #b2bee5);
+  mask-image: radial-gradient(circle 12px at 33% 35%, transparent 96%, black);
+  opacity: 0.36;
 }
 
-.moonGlow {
-  width: 96px;
+.detailGlow {
+  width: 138px;
   height: 96px;
-  background: radial-gradient(circle, rgb(164 166 239 / 24%), transparent 68%);
-  opacity: 0.24;
+  background: radial-gradient(ellipse, rgb(var(--sky-glow) / 13%), transparent 70%);
+  opacity: 0;
 }
 
 .moonScene:hover .moon {
-  opacity: 0.8;
-}
-
-.moonScene:hover .moonGlow {
-  opacity: 0.85;
+  opacity: 0.63;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .moon,
-  .moonGlow,
+  .detailGlow,
   .links,
   .stars {
     transition: none;

@@ -18,10 +18,10 @@ const constellationStars: Star[] = [
 ];
 
 const moonStars: Star[] = [
-  { x: 51, y: 82, size: 2, opacity: 0.52 },
-  { x: 75, y: 37, size: 2.5, opacity: 0.65 },
-  { x: 134, y: 69, size: 3, opacity: 0.7 },
-  { x: 155, y: 47, size: 2, opacity: 0.53 },
+  { x: 37, y: 48, size: 2, opacity: 0.52 },
+  { x: 63, y: 90, size: 3, opacity: 0.76 },
+  { x: 146, y: 73, size: 3.5, opacity: 0.81 },
+  { x: 170, y: 39, size: 2, opacity: 0.54 },
 ];
 
 const links = [
@@ -51,6 +51,7 @@ export function ProfileSkyDetails() {
   return (
     <>
       <div aria-hidden="true" className={`${styles.skyDetail} ${styles.constellation}`}>
+        <span className={styles.detailGlow} />
         <div className={styles.links}>
           {links.map(([from, to]) => {
             const start = constellationStars[from];
@@ -75,7 +76,7 @@ export function ProfileSkyDetails() {
         <Stars points={constellationStars} />
       </div>
       <div aria-hidden="true" className={`${styles.skyDetail} ${styles.moonScene}`}>
-        <span className={styles.moonGlow} />
+        <span className={styles.detailGlow} />
         <span className={styles.moon} />
         <Stars points={moonStars} />
       </div>
