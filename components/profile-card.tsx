@@ -41,6 +41,7 @@ export function ProfileCard() {
           </video>
           <div className={styles.glassTint} />
           <div className={styles.reflection} />
+          <div className={styles.edgeSweep} />
         </div>
 
         {/* Content */}
