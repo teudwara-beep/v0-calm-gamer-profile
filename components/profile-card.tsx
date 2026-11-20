@@ -8,6 +8,7 @@ import { DiscordDisplayName } from "./discord-display-name";
 import { SocialLinks } from "./social-icons";
 import { useLanyard } from "@/hooks/use-lanyard";
 import { User } from "lucide-react";
+import styles from "./profile-card.module.css";
 
 const statusColors = {
   online: "bg-emerald-400",
@@ -27,35 +28,29 @@ export function ProfileCard() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.75, ease: "easeOut" }}
-      className="relative w-full max-w-md mx-auto"
+      className={`relative w-full max-w-md mx-auto ${styles.perspective}`}
     >
-      <div className="relative overflow-hidden rounded-[32px] border border-[#c6b7f4]/18 bg-[#141726]/80 p-5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.75),0_0_28px_-14px_rgba(181,159,244,0.28)] backdrop-blur-2xl sm:p-8">
-        <video
+      <div className={`relative border border-transparent p-5 sm:p-8 ${styles.card}`}>
+        <div aria-hidden="true" className={styles.backPlate} />
+        <div
           aria-hidden="true"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-10 motion-reduce:hidden"
+          className="pointer-events-none absolute inset-[-1px] overflow-hidden rounded-[32px] border border-[#c6b7f4]/18 bg-[#141726]/80 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.75),0_0_28px_-14px_rgba(181,159,244,0.28)] backdrop-blur-2xl"
         >
-          <source src="/card-bg.mp4" type="video/mp4" />
-        </video>
-        {/* Smooth inner border glow */}
-        <div className="absolute inset-0 rounded-[32px] pointer-events-none"
-          style={{
-            background: "linear-gradient(155deg, rgba(208,190,255,0.11), transparent 48%, rgba(9,11,21,0.3))",
-            boxShadow: "inset 0 1px 0 rgba(241,233,255,0.07)"
-          }}
-        />
+          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover opacity-10 motion-reduce:hidden">
+            <source src="/card-bg.mp4" type="video/mp4" />
+          </video>
+          <div className={styles.glassTint} />
+          <div className={styles.reflection} />
+        </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-4 sm:gap-5">
+        <div className={`relative flex flex-col items-center gap-4 sm:gap-5 ${styles.content}`}>
           {/* Avatar with Discord decoration */}
           <motion.div
             initial={{ scale: 0.97, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.7 }}
-            className="relative"
+            className={`relative ${styles.avatar}`}
           >
             <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-lavender/20 to-indigo-500/12 blur-md animate-soft-glow" />
             
